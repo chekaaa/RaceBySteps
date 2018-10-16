@@ -11,6 +11,9 @@ public class NetManager : MonoBehaviourPunCallbacks
     public delegate void JoinedRoomHandler();
     public event JoinedRoomHandler JoinedRoom;
 
+    public delegate void PlayerJoinedRoomHandler();
+    public event PlayerJoinedRoomHandler PlayerJoinedRoom;
+
 
     private bool m_isConnectedToMaster;
     public bool IsConnectedToMaster
@@ -44,6 +47,7 @@ public class NetManager : MonoBehaviourPunCallbacks
     {
         if (!PhotonNetwork.IsConnected)
         {
+            PhotonNetwork.AutomaticallySyncScene = true;
             PhotonNetwork.GameVersion = m_gameVersion;
             PhotonNetwork.ConnectUsingSettings();
 
@@ -77,6 +81,14 @@ public class NetManager : MonoBehaviourPunCallbacks
         if (JoinedRoom == null)
             return;
         JoinedRoom();
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        if(PlayerJoinedRoom != null)
+        {
+            PlayerJoinedRoom();
+        }
     }
 
 
