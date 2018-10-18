@@ -165,7 +165,7 @@ namespace Photon.Pun
     }
 
 
-    public class CleanUpDefinesOnPunDelete : AssetModificationProcessor
+    public class CleanUpDefinesOnPunDelete : UnityEditor.AssetModificationProcessor
     {
         public static AssetDeleteResult OnWillDeleteAsset(string assetPath, RemoveAssetOptions rao)
         {

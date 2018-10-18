@@ -11,12 +11,14 @@ public class RoomManager : MonoBehaviour
     private void Start()
     {
         NetManager.instance.JoinedRoom += UpdatePlayerCountDisplay;
+        NetManager.instance.JoinedRoom += CheckFullRoom;
         NetManager.instance.PlayerJoinedRoom += UpdatePlayerCountDisplay;
         NetManager.instance.PlayerJoinedRoom += CheckFullRoom;
     }
 
     private void OnDisable()
     {
+        NetManager.instance.JoinedRoom -= CheckFullRoom;
         NetManager.instance.JoinedRoom -= UpdatePlayerCountDisplay;
         NetManager.instance.PlayerJoinedRoom -= UpdatePlayerCountDisplay;
         NetManager.instance.PlayerJoinedRoom -= CheckFullRoom;
@@ -33,7 +35,7 @@ public class RoomManager : MonoBehaviour
         if (!PhotonNetwork.IsMasterClient)
             return;
 
-        if(PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+        if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
         {
             PhotonNetwork.LoadLevel(1);
         }

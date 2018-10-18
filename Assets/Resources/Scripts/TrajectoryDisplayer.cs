@@ -1,31 +1,45 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class TrajectoryDisplayer : MonoBehaviour
+public class TrajectoryDisplayer : MonoBehaviourPun
 {
     private CarBehaviour m_carBehaviour;
 
+    private const string DOT_GUIDE = "DotGuide";
+
     public GameObject dotPrefab;
-    public Transform dotGuide;
+    private Transform dotGuide;
     List<GameObject> dotList = new List<GameObject>();
 
-    private void Awake()
+
+    public void Init()
     {
-        m_carBehaviour = GetComponent<CarBehaviour>();
+        CarInfo _info = GetComponent<CarInfo>();
+        if (_info.ownerId == PhotonNetwork.LocalPlayer.ActorNumber)
+        {
+            this.enabled = true;
+            m_carBehaviour = GetComponent<CarBehaviour>();
+            dotGuide = GameObject.Find(DOT_GUIDE).transform;
+        }
     }
 
     void Update()
     {
+        float _targetSpeed = PlayerController.instance.targetSpeed;
+        float _rotAmount = PlayerController.instance.rotAmount;
 
-
-        if (m_carBehaviour.rotAmount != m_carBehaviour.prevRotAmount || m_carBehaviour.targetSpeed != m_carBehaviour.prevTargetSpeed)
+        //Update dots if  the rotation or targetSpeed changed
+        if (_rotAmount != m_carBehaviour.prevRotAmount || _targetSpeed != m_carBehaviour.prevTargetSpeed)
         {
-            m_carBehaviour.prevRotAmount = m_carBehaviour.rotAmount;
-            m_carBehaviour.prevTargetSpeed = m_carBehaviour.targetSpeed;
+            m_carBehaviour.prevRotAmount = _rotAmount;
+            m_carBehaviour.prevTargetSpeed = _targetSpeed;
             UpdateDots();
         }
-        if (m_carBehaviour.isMoving)
+        //Remove all dots if is in move Phase
+        if (GameManager.instance.isMovePhase)
         {
             RemoveDots();
 
@@ -60,8 +74,11 @@ public class TrajectoryDisplayer : MonoBehaviour
         dotGuide.rotation = transform.rotation;
         float spd = m_carBehaviour.speed;
         float rSpd = m_carBehaviour.rotSpeed;
+        float _targetSpeed = PlayerController.instance.targetSpeed;
+        float _rotAmount = PlayerController.instance.rotAmount;
 
-        float amount = m_carBehaviour.turnDuration / m_carBehaviour.delta;
+
+        float amount = GameManager.instance.turnDuration / GameManager.instance.delta;
 
 
         for (int i = 0; i <= amount; i++)
@@ -73,22 +90,21 @@ public class TrajectoryDisplayer : MonoBehaviour
                 dotList.Add(go);
             }
             //spd += m_acceleration * 0.02f;
-            spd = Mathf.MoveTowards(spd, m_carBehaviour.targetSpeed, m_carBehaviour.delta * m_carBehaviour.acceleration);
-            spd = Mathf.Clamp(spd, -0.5f, m_carBehaviour.maxSpeed);
+            spd = Mathf.MoveTowards(spd, _targetSpeed, GameManager.instance.delta * m_carBehaviour.acceleration);
 
-            if (m_carBehaviour.rotAmount > 0)
+            if (_rotAmount > 0)
             {
-                rSpd = m_carBehaviour.rotAmount - spd;
+                rSpd = _rotAmount - spd;
             }
-            else if (m_carBehaviour.rotAmount < 0)
+            else if (_rotAmount < 0)
             {
-                rSpd = m_carBehaviour.rotAmount + spd;
+                rSpd = _rotAmount + spd;
             }
             else
             {
                 rSpd = 0f;
             }
-            rSpd *= m_carBehaviour.delta;
+            rSpd *= GameManager.instance.delta;
             Vector3 r = new Vector3(0f, 0f, rSpd);
             dotGuide.Rotate(r);
             dotGuide.position += dotGuide.up * spd;

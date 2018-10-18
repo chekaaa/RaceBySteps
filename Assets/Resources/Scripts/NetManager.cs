@@ -25,11 +25,14 @@ public class NetManager : MonoBehaviourPunCallbacks
     [SerializeField] private byte m_maxPlayers = 4;
     [SerializeField] private string m_gameVersion = "0.1";
 
+
+
     private void Awake()
     {
 
         if (instance == null)
         {
+            // DontDestroyOnLoad(this.gameObject);
             instance = this;
         }
         else
@@ -85,7 +88,7 @@ public class NetManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        if(PlayerJoinedRoom != null)
+        if (PlayerJoinedRoom != null)
         {
             PlayerJoinedRoom();
         }
