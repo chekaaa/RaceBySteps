@@ -138,8 +138,8 @@ public class GameManager : MonoBehaviourPunCallbacks
             Transform _spawn = m_spawnList[m_spawnIndex];
             GameObject go = PhotonNetwork.Instantiate(CARPREFAB_NAME, _spawn.position, _spawn.rotation);
             carList.Add(_player.ActorNumber, go);
-            go.GetComponent<CarInfo>().Init(_player.ActorNumber);
-            CameraBehaviour.instance.target = go.transform;
+            go.GetComponent<CarInfo>().Init(_player.ActorNumber, m_spawnIndex);
+            m_spawnIndex++;
         }
     }
 

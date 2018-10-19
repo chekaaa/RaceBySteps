@@ -152,6 +152,12 @@ MonoBehaviour:
   ownerId: 0
   m_carBehaviour: {fileID: 114469673634636352}
   m_trajectoryDisplayer: {fileID: 114310085837447858}
+  m_spriteRenderer: {fileID: 212853808804926776}
+  carSprites:
+  - {fileID: 21300000, guid: 18e539a7a1d19d64c95cedc460fcfbe2, type: 3}
+  - {fileID: 21300000, guid: 8c483b97f71de484fb41d5fa7c916174, type: 3}
+  - {fileID: 21300000, guid: b0031b764c3f470488f8e4c22b763c2f, type: 3}
+  - {fileID: 21300000, guid: 63134c18a13efad44aae38bbd165ca34, type: 3}
 --- !u!212 &212853808804926776
 SpriteRenderer:
   m_ObjectHideFlags: 1
