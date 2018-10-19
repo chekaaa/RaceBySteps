@@ -30,4 +30,6 @@ MonoBehaviour:
   RpcList:
   - RPCChangePhase
   - RPCChangeToMovePhase
+  - CMDPlayerTurnInfo
+  - RPCChangeToPlanPhase
   DisableAutoOpenWizard: 1

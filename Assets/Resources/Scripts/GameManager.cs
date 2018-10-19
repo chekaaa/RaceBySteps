@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
     public Button turnButton;
+    public TMP_Text turnTimerTxt;
+
     public Dictionary<int, GameObject> carList = new Dictionary<int, GameObject>();
     [SerializeField] private Transform m_spawnParent;
     private Transform[] m_spawnList;
@@ -44,6 +47,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         FillSpawnList();
         m_spawnIndex = 0;
+        m_planPhaseTimer = turnDuration;
         SpawnCars();
     }
 
@@ -74,8 +78,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         else
         {
-            m_planPhaseTimer += Time.deltaTime;
-            if (m_planPhaseTimer >= planPhaseDuration)
+            m_planPhaseTimer -= Time.deltaTime;
+            turnTimerTxt.text = (int)m_planPhaseTimer + "";
+            if (m_planPhaseTimer <= 0)
             {
                 CompleteTurn();
             }
@@ -104,7 +109,7 @@ public class GameManager : MonoBehaviourPunCallbacks
          PlayerController.instance.rotAmount,
         PlayerController.instance.targetSpeed);
 
-        m_planPhaseTimer = 0f;
+        m_planPhaseTimer = turnDuration;
         turnButton.interactable = false;
     }
 

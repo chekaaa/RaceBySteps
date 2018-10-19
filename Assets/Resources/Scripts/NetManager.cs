@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine.UI;
 
 public class NetManager : MonoBehaviourPunCallbacks
 {
@@ -13,6 +14,8 @@ public class NetManager : MonoBehaviourPunCallbacks
 
     public delegate void PlayerJoinedRoomHandler();
     public event PlayerJoinedRoomHandler PlayerJoinedRoom;
+
+    public Button findMatchBtn;
 
 
     private bool m_isConnectedToMaster;
@@ -100,6 +103,8 @@ public class NetManager : MonoBehaviourPunCallbacks
     {
         Debug.Log("Connected to master");
         m_isConnectedToMaster = true;
+        findMatchBtn.interactable = true;
+
 
     }
 
