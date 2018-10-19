@@ -233,7 +233,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &123455462
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1847,6 +1847,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnDuration: 2
+  planPhaseDuration: 4
   delta: 0.02
   isMovePhase: 0
   turnButton: {fileID: 123455463}

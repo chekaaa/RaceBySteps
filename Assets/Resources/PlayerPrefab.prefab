@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4794968409180342}
   - component: {fileID: 114469673634636352}
   - component: {fileID: 114310085837447858}
+  - component: {fileID: 114835712968341890}
   - component: {fileID: 114492041977804152}
   m_Layer: 0
   m_Name: PlayerPrefab
@@ -90,7 +91,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1639322013924170}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 21990a6da0e3a5c44be14ac37eb54371, type: 3}
   m_Name: 
@@ -122,6 +123,20 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
+--- !u!114 &114835712968341890
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1639322013924170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7054943df04d6b04a8f3fac3ee9dea55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  m_carBehaviour: {fileID: 114469673634636352}
+  m_trajectoryDisplayer: {fileID: 114310085837447858}
 --- !u!212 &212853808804926776
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 public class CarBehaviour : MonoBehaviour
 {
@@ -12,8 +13,16 @@ public class CarBehaviour : MonoBehaviour
     public float rotLock = 0.05f;
     [HideInInspector] public float speed = 0f;
     public float acceleration = .05f;
+    private float m_rotAmount = 0f;
+    private float m_targetSpeed = 0f;
 
-
+    public void Init()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            this.enabled = true;
+        }
+    }
 
     void Update()
     {
@@ -25,19 +34,17 @@ public class CarBehaviour : MonoBehaviour
 
     void Move()
     {
-        float _targetSpeed = PlayerController.instance.targetSpeed;
-        float _rotAmount = PlayerController.instance.rotAmount;
         //m_speed += m_acceleration * Time.deltaTime;
-        speed = Mathf.MoveTowards(speed, _targetSpeed, acceleration * GameManager.instance.delta);
+        speed = Mathf.MoveTowards(speed, m_targetSpeed, acceleration * GameManager.instance.delta);
         //m_speed = Mathf.Clamp(m_speed, -0.5f, m_maxSpeed);
 
-        if (_rotAmount > 0)
+        if (m_rotAmount > 0)
         {
-            rotSpeed = _rotAmount - speed;
+            rotSpeed = m_rotAmount - speed;
         }
-        else if (_rotAmount < 0)
+        else if (m_rotAmount < 0)
         {
-            rotSpeed = _rotAmount + speed;
+            rotSpeed = m_rotAmount + speed;
         }
         else
         {
@@ -49,6 +56,12 @@ public class CarBehaviour : MonoBehaviour
         transform.position += transform.up * speed;
         if (speed > rotLock)
             transform.Rotate(rot);
+    }
+
+    public void SetMoveValues(float _rotAmount, float _targetSpeed)
+    {
+        m_rotAmount = _rotAmount;
+        m_targetSpeed = _targetSpeed;
     }
 
 

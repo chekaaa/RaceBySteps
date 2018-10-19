@@ -9,10 +9,16 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager instance;
 
-    private float steps = 0f;
+    private float m_steps = 0f;
+    private float m_planPhaseTimer = 0f;
     public float turnDuration = 5f;
+    public float planPhaseDuration = 4f;
     public float delta = 0.02f;
+
+    private int m_turnsEnded = 0;
+
     public bool isMovePhase = false;
+
 
     public Button turnButton;
     public Dictionary<int, GameObject> carList = new Dictionary<int, GameObject>();
@@ -45,24 +51,60 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
+        if (PhotonNetwork.IsMasterClient)
         {
-            if (isMovePhase)
+            if (areAllTurnsEnded())
             {
+                isMovePhase = true;
+            }
+        }
 
-                steps += delta;
-                if (steps >= turnDuration)
+        if (isMovePhase)
+        {
+            if (PhotonNetwork.IsMasterClient)
+            {
+                m_steps += delta;
+                if (m_steps >= turnDuration)
                 {
-                    isMovePhase = false;
-                    turnButton.interactable = true;
-                    steps = 0f;
+                    photonView.RPC("RPCChangeToPlanPhase", RpcTarget.AllViaServer);
+                    m_steps = 0f;
                 }
             }
+
+        }
+        else
+        {
+            m_planPhaseTimer += Time.deltaTime;
+            if (m_planPhaseTimer >= planPhaseDuration)
+            {
+                CompleteTurn();
+            }
+        }
+
+    }
+
+    private bool areAllTurnsEnded()
+    {
+        if (m_turnsEnded == carList.Count)
+        {
+            m_turnsEnded = 0;
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 
     public void CompleteTurn()
     {
-        isMovePhase = true;
+        photonView.RPC("CMDPlayerTurnInfo",
+         RpcTarget.MasterClient,
+        PhotonNetwork.LocalPlayer.ActorNumber,
+         PlayerController.instance.rotAmount,
+        PlayerController.instance.targetSpeed);
+
+        m_planPhaseTimer = 0f;
         turnButton.interactable = false;
     }
 
@@ -87,11 +129,28 @@ public class GameManager : MonoBehaviourPunCallbacks
             Transform _spawn = m_spawnList[m_spawnIndex];
             GameObject go = PhotonNetwork.Instantiate(CARPREFAB_NAME, _spawn.position, _spawn.rotation);
             carList.Add(_player.ActorNumber, go);
-            go.GetComponent<CarInfo>().ownerId = _player.ActorNumber;
             go.GetComponent<TrajectoryDisplayer>().Init();
+            go.GetComponent<CarInfo>().ownerId = _player.ActorNumber;
             CameraBehaviour.instance.target = go.transform;
         }
+    }
 
+
+    [PunRPC]
+    public void CMDPlayerTurnInfo(int _actorId, float _rotAmount, float _targetSpeed)
+    {
+        if (carList == null)
+            return;
+
+        carList[_actorId].GetComponent<CarBehaviour>().SetMoveValues(_rotAmount, _targetSpeed);
+        m_turnsEnded++;
+    }
+
+    [PunRPC]
+    public void RPCChangeToPlanPhase()
+    {
+        isMovePhase = false;
+        turnButton.interactable = true;
     }
 
 

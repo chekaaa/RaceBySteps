@@ -27,5 +27,7 @@ MonoBehaviour:
   PunLogging: 1
   EnableSupportLogger: 0
   RunInBackground: 1
-  RpcList: []
+  RpcList:
+  - RPCChangePhase
+  - RPCChangeToMovePhase
   DisableAutoOpenWizard: 1
