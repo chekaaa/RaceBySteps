@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class CarBehaviour : MonoBehaviour
+public class CarBehaviour : MonoBehaviourPunCallbacks, IPunObservable
 {
 
     [HideInInspector] public float prevRotAmount = 0;
@@ -15,6 +15,20 @@ public class CarBehaviour : MonoBehaviour
     public float acceleration = .05f;
     private float m_rotAmount = 0f;
     private float m_targetSpeed = 0f;
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (stream.IsWriting)
+        {
+            stream.SendNext(rotSpeed);
+            stream.SendNext(speed);
+        }
+        else
+        {
+            rotSpeed = (float)stream.ReceiveNext();
+            speed = (float)stream.ReceiveNext();
+        }
+    }
 
     public void Init()
     {
@@ -60,6 +74,7 @@ public class CarBehaviour : MonoBehaviour
 
     public void SetMoveValues(float _rotAmount, float _targetSpeed)
     {
+
         m_rotAmount = _rotAmount;
         m_targetSpeed = _targetSpeed;
     }

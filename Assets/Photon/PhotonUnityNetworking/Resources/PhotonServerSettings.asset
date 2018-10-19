@@ -32,4 +32,8 @@ MonoBehaviour:
   - RPCChangeToMovePhase
   - CMDPlayerTurnInfo
   - RPCChangeToPlanPhase
+  - CMDSetReady
+  - RPCStartGame
+  - RPCSyncInfo
+  - RPCChangeMovePhase
   DisableAutoOpenWizard: 1

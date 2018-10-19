@@ -20,9 +20,9 @@ public class TrajectoryDisplayer : MonoBehaviourPun
         CarInfo _info = GetComponent<CarInfo>();
         if (_info.ownerId == PhotonNetwork.LocalPlayer.ActorNumber)
         {
-            this.enabled = true;
             m_carBehaviour = GetComponent<CarBehaviour>();
             dotGuide = GameObject.Find(DOT_GUIDE).transform;
+            this.enabled = true;
         }
     }
 
@@ -39,7 +39,7 @@ public class TrajectoryDisplayer : MonoBehaviourPun
             UpdateDots();
         }
         //Remove all dots if is in move Phase
-        if (GameManager.instance.isMovePhase)
+        if (GameManager.instance.isMovePhase || GameManager.instance.isWaiting)
         {
             RemoveDots();
 

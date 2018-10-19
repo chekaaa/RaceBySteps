@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager instance;
 
+    [SerializeField] private float m_readyTimeLimit = 15f;
+    private float m_readyTime = 0f;
     private float m_steps = 0f;
     private float m_planPhaseTimer = 0f;
     public float turnDuration = 5f;
@@ -17,10 +19,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     public float delta = 0.02f;
 
     private int m_turnsEnded = 0;
+    private int m_playersReady = 0;
 
+    private bool m_isStarted = false;
+    public bool isWaiting = false;
     public bool isMovePhase = false;
 
 
+    public GameObject readyPanel, waitingTxt, readyBtn;
     public Button turnButton;
     public TMP_Text turnTimerTxt;
     public GameObject wheel, gasSlider;
@@ -47,21 +53,35 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Start()
     {
         FillSpawnList();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            SpawnCars();
+        }
         m_spawnIndex = 0;
-        m_planPhaseTimer = planPhaseDuration;
         turnTimerTxt.text = (int)m_planPhaseTimer + "";
-        SpawnCars();
+        m_planPhaseTimer = planPhaseDuration;
     }
 
 
 
     private void Update()
     {
+        if (!m_isStarted)
+        {
+            m_readyTime += Time.deltaTime;
+            if (m_readyTime >= m_readyTimeLimit)
+            {
+                SetReady();
+            }
+            return;
+        }
+
         if (PhotonNetwork.IsMasterClient)
         {
             if (areAllTurnsEnded())
             {
-                isMovePhase = true;
+                photonView.RPC("RPCChangeMovePhase", RpcTarget.All);
+                //isMovePhase = true;
             }
         }
 
@@ -78,7 +98,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
 
         }
-        else
+        else if (!isWaiting)
         {
             m_planPhaseTimer -= Time.deltaTime;
             turnTimerTxt.text = (int)m_planPhaseTimer + "";
@@ -88,6 +108,48 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
 
+    }
+    [PunRPC]
+    public void RPCChangeMovePhase()
+    {
+        isMovePhase = true;
+
+    }
+
+    public void SetReady()
+    {
+        readyBtn.SetActive(false);
+        waitingTxt.SetActive(true);
+        photonView.RPC("CMDSetReady", RpcTarget.MasterClient);
+    }
+
+    [PunRPC]
+    public void CMDSetReady()
+    {
+        m_playersReady++;
+        if (areAllPlayersReady())
+        {
+            photonView.RPC("RPCStartGame", RpcTarget.AllBufferedViaServer);
+        }
+    }
+
+    [PunRPC]
+    public void RPCStartGame()
+    {
+        readyPanel.SetActive(false);
+        m_isStarted = true;
+    }
+
+    private bool areAllPlayersReady()
+    {
+        if (m_playersReady == carList.Count)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private bool areAllTurnsEnded()
@@ -106,13 +168,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void CompleteTurn()
     {
         photonView.RPC("CMDPlayerTurnInfo",
-         RpcTarget.MasterClient,
+         RpcTarget.All,
         PhotonNetwork.LocalPlayer.ActorNumber,
          PlayerController.instance.rotAmount,
         PlayerController.instance.targetSpeed);
 
         wheel.SetActive(false);
         gasSlider.SetActive(false);
+        isWaiting = true;
         m_planPhaseTimer = planPhaseDuration;
         turnButton.interactable = false;
     }
@@ -137,7 +200,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             Transform _spawn = m_spawnList[m_spawnIndex];
             GameObject go = PhotonNetwork.Instantiate(CARPREFAB_NAME, _spawn.position, _spawn.rotation);
-            carList.Add(_player.ActorNumber, go);
+            //carList.Add(_player.ActorNumber, go);
             go.GetComponent<CarInfo>().Init(_player.ActorNumber, m_spawnIndex);
             m_spawnIndex++;
         }
@@ -151,13 +214,17 @@ public class GameManager : MonoBehaviourPunCallbacks
             return;
 
         carList[_actorId].GetComponent<CarBehaviour>().SetMoveValues(_rotAmount, _targetSpeed);
-        m_turnsEnded++;
+        if (PhotonNetwork.IsMasterClient)
+        {
+            m_turnsEnded++;
+        }
     }
 
     [PunRPC]
     public void RPCChangeToPlanPhase()
     {
         isMovePhase = false;
+        isWaiting = false;
         turnButton.interactable = true;
         wheel.SetActive(true);
         gasSlider.SetActive(true);
