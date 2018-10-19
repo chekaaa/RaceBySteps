@@ -10,7 +10,7 @@ public class CarInfo : MonoBehaviour
     [SerializeField] private CarBehaviour m_carBehaviour;
     [SerializeField] private TrajectoryDisplayer m_trajectoryDisplayer;
 
-    private void Awake()
+    public void Init(int _ownerId)
     {
         m_carBehaviour.Init();
         m_trajectoryDisplayer.Init();

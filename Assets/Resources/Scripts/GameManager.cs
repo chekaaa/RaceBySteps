@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public Button turnButton;
     public TMP_Text turnTimerTxt;
+    public GameObject wheel, gasSlider;
 
     public Dictionary<int, GameObject> carList = new Dictionary<int, GameObject>();
     [SerializeField] private Transform m_spawnParent;
@@ -47,7 +48,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         FillSpawnList();
         m_spawnIndex = 0;
-        m_planPhaseTimer = turnDuration;
+        m_planPhaseTimer = planPhaseDuration;
+        turnTimerTxt.text = (int)m_planPhaseTimer + "";
         SpawnCars();
     }
 
@@ -80,7 +82,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             m_planPhaseTimer -= Time.deltaTime;
             turnTimerTxt.text = (int)m_planPhaseTimer + "";
-            if (m_planPhaseTimer <= 0)
+            if (m_planPhaseTimer < 1f)
             {
                 CompleteTurn();
             }
@@ -109,7 +111,9 @@ public class GameManager : MonoBehaviourPunCallbacks
          PlayerController.instance.rotAmount,
         PlayerController.instance.targetSpeed);
 
-        m_planPhaseTimer = turnDuration;
+        wheel.SetActive(false);
+        gasSlider.SetActive(false);
+        m_planPhaseTimer = planPhaseDuration;
         turnButton.interactable = false;
     }
 
@@ -134,8 +138,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             Transform _spawn = m_spawnList[m_spawnIndex];
             GameObject go = PhotonNetwork.Instantiate(CARPREFAB_NAME, _spawn.position, _spawn.rotation);
             carList.Add(_player.ActorNumber, go);
-            go.GetComponent<TrajectoryDisplayer>().Init();
-            go.GetComponent<CarInfo>().ownerId = _player.ActorNumber;
+            go.GetComponent<CarInfo>().Init(_player.ActorNumber);
             CameraBehaviour.instance.target = go.transform;
         }
     }
@@ -156,6 +159,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         isMovePhase = false;
         turnButton.interactable = true;
+        wheel.SetActive(true);
+        gasSlider.SetActive(true);
     }
 
 

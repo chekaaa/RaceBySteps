@@ -30,4 +30,5 @@ public class PlayerController : MonoBehaviour
         rotAmount = -SimpleInput.GetAxis("Horizontal") * maxRot;
         targetSpeed = PlayerController.instance.gasSlider.value;
     }
+
 }
