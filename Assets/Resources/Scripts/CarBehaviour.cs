@@ -79,5 +79,13 @@ public class CarBehaviour : MonoBehaviourPunCallbacks, IPunObservable
         m_targetSpeed = _targetSpeed;
     }
 
+    public void StopCar()
+    {
+        m_rotAmount = 0f;
+        m_targetSpeed = 0f;
+        speed = 0f;
+        rotSpeed = 0f;
+    }
+
 
 }
