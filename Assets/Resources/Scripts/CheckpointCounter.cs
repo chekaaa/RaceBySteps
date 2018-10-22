@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class CheckpointCounter : MonoBehaviour
 {
@@ -8,11 +9,20 @@ public class CheckpointCounter : MonoBehaviour
     private const string CP_TAG = "Checkpoint";
 
     private int m_lastCpIndex, m_nextCpIndex = 1, m_startCpIndex = 0;
+    private CarInfo m_carInfo;
+
+    private void Start()
+    {
+        m_carInfo = GetComponent<CarInfo>();
+    }
 
 
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         if (other.tag == CP_TAG)
         {
             string _nextCpName = RaceManager.instance.cpList[m_nextCpIndex].name;
@@ -22,6 +32,8 @@ public class CheckpointCounter : MonoBehaviour
                 if (m_nextCpIndex == 0)
                 {
                     //Lap
+
+                    RaceManager.instance.AddLapToCar(m_carInfo.ownerId);
                     m_nextCpIndex++;
                     Debug.Log("Lap");
                 }

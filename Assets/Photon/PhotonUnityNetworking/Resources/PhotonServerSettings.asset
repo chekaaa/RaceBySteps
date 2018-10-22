@@ -36,4 +36,5 @@ MonoBehaviour:
   - RPCStartGame
   - RPCSyncInfo
   - RPCChangeMovePhase
+  - RPCUpdateLapDisplay
   DisableAutoOpenWizard: 1

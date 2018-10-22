@@ -1,14 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class RaceManager : MonoBehaviour
+public class RaceManager : MonoBehaviourPun
 {
     public static RaceManager instance;
+
+    public LapDisplayer lapDisplayer;
 
     public Transform cpParent;
     public List<Transform> cpList = new List<Transform>();
     public int CPCount;
+
+    public int TotalLaps = 3;
+
+    private Dictionary<int, int> lapList = new Dictionary<int, int>();
+    private List<int> positionList = new List<int>();
 
     private void Awake()
     {
@@ -26,11 +35,77 @@ public class RaceManager : MonoBehaviour
 
     private void Start()
     {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
         FillCpList();
+        FillLapList();
+    }
+
+    public void AddLapToCar(int _playerId)
+    {
+        lapList[_playerId]++;
+        photonView.RPC("RPCUpdateLapDisplay", RpcTarget.All, lapList[_playerId], _playerId);
+
+        if (ischeckeredFlag(_playerId))
+        {
+            positionList.Add(_playerId);
+        }
+        if (areAllFinished())
+        {
+            //EndGame - Display positions
+            Debug.Log("Race ended");
+
+        }
+
+    }
+
+    [PunRPC]
+    public void RPCUpdateLapDisplay(int _laps, int _playerId)
+    {
+        if (_playerId == PhotonNetwork.LocalPlayer.ActorNumber)
+        {
+            lapDisplayer.UpdateLapTxt(_laps);
+        }
+    }
+
+
+
+    private bool areAllFinished()
+    {
+        if (positionList.Count >= GameManager.instance.carList.Count)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private bool ischeckeredFlag(int _playerId)
+    {
+        if (lapList[_playerId] >= TotalLaps)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void FillLapList()
+    {
+        foreach (int i in GameManager.instance.carList.Keys)
+        {
+            lapList.Add(i, 0);
+        }
     }
 
     private void FillCpList()
     {
+        //Checkpoints must be in order in the editor
         foreach (Transform t in cpParent)
         {
             cpList.Add(t);
