@@ -2409,9 +2409,9 @@ EdgeCollider2D:
   - {x: -1.76591, y: -1.9004}
   - {x: -1.55773, y: -1.99335}
   - {x: -1.52987, y: -2.00398}
-  - {x: -1.0975145, y: -1.998195}
-  - {x: -0.43570906, y: -2.0678537}
-  - {x: 0.36905682, y: -2.1627223}
+  - {x: -1.1076212, y: -2.0291271}
+  - {x: -0.45592263, y: -2.1297164}
+  - {x: 0.3892702, y: -2.2142756}
   - {x: 1.3307129, y: -2.2336812}
   - {x: 2.1492739, y: -2.2741027}
   - {x: 2.9184277, y: -2.2582939}
@@ -2491,9 +2491,9 @@ EdgeCollider2D:
   - {x: -0.99424, y: 0.82636}
   - {x: -1.0658402, y: 0.6844813}
   - {x: -1.0525839, y: 0.526932}
-  - {x: -1.0588737, y: 0.3163121}
+  - {x: -0.9992699, y: 0.27070764}
   - {x: -1.069954, y: 0.11767107}
-  - {x: -1.1835339, y: -0.13583031}
+  - {x: -1.1835338, y: -0.2118376}
   - {x: -1.2783644, y: -0.3170981}
   - {x: -1.3645406, y: -0.4969088}
   - {x: -1.4219037, y: -0.6225399}
@@ -5409,9 +5409,32 @@ Prefab:
       propertyPath: waitingTxt
       value: 
       objectReference: {fileID: 406392171}
+    - target: {fileID: 114689764789003640, guid: bcdcbff1faa1ea04baf0f2474a41f5d5,
+        type: 2}
+      propertyPath: turnDuration
+      value: 1.8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcdcbff1faa1ea04baf0f2474a41f5d5, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1 &1894063261 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1885716473471416, guid: bcdcbff1faa1ea04baf0f2474a41f5d5,
+    type: 2}
+  m_PrefabInternal: {fileID: 1894063260}
+--- !u!114 &1894063262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1894063261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 518cb8897e03be541be1965911bc640e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cpParent: {fileID: 7430334}
+  cpList: []
 --- !u!1 &1950959143
 GameObject:
   m_ObjectHideFlags: 0

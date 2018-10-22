@@ -93,6 +93,7 @@ public class GameManager : MonoBehaviourPunCallbacks
                 if (m_steps >= turnDuration)
                 {
                     photonView.RPC("RPCChangeToPlanPhase", RpcTarget.AllViaServer);
+                    isMovePhase = false;
                     m_steps = 0f;
                 }
             }
