@@ -37,4 +37,5 @@ MonoBehaviour:
   - RPCSyncInfo
   - RPCChangeMovePhase
   - RPCUpdateLapDisplay
+  - CMDMovePhaseEnded
   DisableAutoOpenWizard: 1

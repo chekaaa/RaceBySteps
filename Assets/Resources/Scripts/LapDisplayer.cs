@@ -16,7 +16,7 @@ public class LapDisplayer : MonoBehaviour
     {
         _laps = Mathf.Clamp(_laps, 0, RaceManager.instance.TotalLaps);
 
-        m_lapTxt.text = _laps + "/" + RaceManager.instance.TotalLaps;
+        m_lapTxt.text = "LAPS " + _laps + "/" + RaceManager.instance.TotalLaps;
     }
 
 

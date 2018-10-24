@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public float delta = 0.02f;
 
     private int m_turnsEnded = 0;
+    private int m_movePhasesEnded = 0;
     private int m_playersReady = 0;
 
     private bool m_isStarted = false;
@@ -87,16 +88,16 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (isMovePhase)
         {
-            if (PhotonNetwork.IsMasterClient)
+            // if (PhotonNetwork.IsMasterClient)
+            // {
+            m_steps += delta;
+            if (m_steps >= turnDuration)
             {
-                m_steps += delta;
-                if (m_steps >= turnDuration)
-                {
-                    photonView.RPC("RPCChangeToPlanPhase", RpcTarget.AllViaServer);
-                    isMovePhase = false;
-                    m_steps = 0f;
-                }
+                photonView.RPC("CMDMovePhaseEnded", RpcTarget.MasterClient);
+                isMovePhase = false;
+                m_steps = 0f;
             }
+            // }
 
         }
         else if (!isWaiting)
@@ -115,6 +116,32 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         isMovePhase = true;
 
+    }
+
+    [PunRPC]
+    public void CMDMovePhaseEnded()
+    {
+        m_movePhasesEnded++;
+
+        if (areAllMovePhasesEnded())
+        {
+            photonView.RPC("RPCChangeToPlanPhase", RpcTarget.AllViaServer);
+            m_movePhasesEnded = 0;
+
+        }
+
+    }
+
+    private bool areAllMovePhasesEnded()
+    {
+        if (m_movePhasesEnded >= carList.Count)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public void SetReady()

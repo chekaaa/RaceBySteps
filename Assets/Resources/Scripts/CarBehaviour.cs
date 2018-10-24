@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class CarBehaviour : MonoBehaviourPunCallbacks, IPunObservable
+public class CarBehaviour : MonoBehaviourPunCallbacks
 {
 
     [HideInInspector] public float prevRotAmount = 0;
@@ -14,28 +14,35 @@ public class CarBehaviour : MonoBehaviourPunCallbacks, IPunObservable
     [HideInInspector] public float speed = 0f;
     public float acceleration = .05f;
     private float m_rotAmount = 0f;
+
     private float m_targetSpeed = 0f;
 
-    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-    {
-        if (stream.IsWriting)
-        {
-            stream.SendNext(rotSpeed);
-            stream.SendNext(speed);
-        }
-        else
-        {
-            rotSpeed = (float)stream.ReceiveNext();
-            speed = (float)stream.ReceiveNext();
-        }
-    }
+
+    // public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    // {
+    //     if (stream.IsWriting)
+    //     {
+    //         stream.SendNext(rotSpeed);
+    //         stream.SendNext(speed);
+
+    //     }
+    //     else
+    //     {
+    //         rotSpeed = (float)stream.ReceiveNext();
+    //         speed = (float)stream.ReceiveNext();
+
+    //     }
+    // }
+
+
+
 
     public void Init()
     {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            this.enabled = true;
-        }
+        // if (PhotonNetwork.IsMasterClient)
+        // {
+        this.enabled = true;
+        // }
     }
 
     void Update()
