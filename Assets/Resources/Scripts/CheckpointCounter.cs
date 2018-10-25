@@ -8,7 +8,7 @@ public class CheckpointCounter : MonoBehaviour
     // private const string STARTCP_TAG = "StartCp";
     private const string CP_TAG = "Checkpoint";
 
-    private int m_lastCpIndex, m_nextCpIndex = 1, m_startCpIndex = 0;
+    private int m_lastCpIndex, m_nextCpIndex = 1;
     private CarInfo m_carInfo;
 
     private void Start()

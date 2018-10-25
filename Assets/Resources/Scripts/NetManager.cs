@@ -4,10 +4,13 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
+using TMPro;
 
 public class NetManager : MonoBehaviourPunCallbacks
 {
     public static NetManager instance;
+
+    private const string USERNAME_PLAYERPREFS = "Username";
 
     public delegate void JoinedRoomHandler();
     public event JoinedRoomHandler JoinedRoom;
@@ -16,6 +19,7 @@ public class NetManager : MonoBehaviourPunCallbacks
     public event PlayerJoinedRoomHandler PlayerJoinedRoom;
 
     public Button findMatchBtn;
+    public TMP_InputField usernameInput;
 
 
     private bool m_isConnectedToMaster;
@@ -104,13 +108,22 @@ public class NetManager : MonoBehaviourPunCallbacks
         Debug.Log("Connected to master");
         m_isConnectedToMaster = true;
         findMatchBtn.interactable = true;
-
+        string _username = PlayerPrefs.GetString(USERNAME_PLAYERPREFS, "Player");
+        PhotonNetwork.NickName = _username;
+        usernameInput.text = _username;
 
     }
 
     public override void OnDisconnected(DisconnectCause cause)
     {
         m_isConnectedToMaster = false;
+    }
+
+    public void ChangeUsername()
+    {
+        string _newUsername = usernameInput.text;
+        PhotonNetwork.NickName = _newUsername;
+        PlayerPrefs.SetString(USERNAME_PLAYERPREFS, _newUsername);
     }
 
 }

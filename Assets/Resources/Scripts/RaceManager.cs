@@ -19,6 +19,7 @@ public class RaceManager : MonoBehaviourPun
     private Dictionary<int, int> lapList = new Dictionary<int, int>();
     private List<int> positionList = new List<int>();
 
+
     private void Awake()
     {
 
@@ -55,8 +56,21 @@ public class RaceManager : MonoBehaviourPun
         {
             //EndGame - Display positions
             Debug.Log("Race ended");
-
+            photonView.RPC("RPCFinishGame", RpcTarget.All);
         }
+
+    }
+
+    private void FillPositionsList()
+    {
+        //Fill position list on endgame UI
+    }
+
+    [PunRPC]
+    public void RPCFinishGame()
+    {
+        GameManager.instance.isGameEnded = true;
+        IngameUiManager.instance.SetEndgameUI();
 
     }
 

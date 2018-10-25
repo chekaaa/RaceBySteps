@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private int m_playersReady = 0;
 
     private bool m_isStarted = false;
+    public bool isGameEnded = false;
     public bool isWaiting = false;
     public bool isMovePhase = false;
 
@@ -74,6 +76,13 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 SetReady();
             }
+            return;
+        }
+
+        if (isGameEnded)
+        {
+            //Endgame
+            isMovePhase = false;
             return;
         }
 
@@ -229,11 +238,43 @@ public class GameManager : MonoBehaviourPunCallbacks
             Transform _spawn = m_spawnList[m_spawnIndex];
             GameObject go = PhotonNetwork.Instantiate(CARPREFAB_NAME, _spawn.position, _spawn.rotation);
             //carList.Add(_player.ActorNumber, go);
-            go.GetComponent<CarInfo>().Init(_player.ActorNumber, m_spawnIndex);
+            go.GetComponent<CarInfo>().Init(_player.ActorNumber, m_spawnIndex,
+            GetUniqueUsername(_player.NickName));
             m_spawnIndex++;
         }
     }
 
+    private string GetUniqueUsername(string _username)
+    {
+        foreach (GameObject go in carList.Values)
+        {
+            CarInfo _info = go.GetComponent<CarInfo>();
+            if (_info.ownerUsername == _username)
+            {
+                int _newIndex = 1;
+                string _newUsername = "";
+                for (int i = PhotonNetwork.CurrentRoom.MaxPlayers; i > 0; i--)
+                {
+
+                    string _tempusername = _username + " (" + i + ")";
+                    foreach (GameObject car in carList.Values)
+                    {
+                        CarInfo _info2 = car.GetComponent<CarInfo>();
+                        if (_info2.ownerUsername == _tempusername)
+                        {
+                            _newIndex = i + 1;
+                            _newUsername = _username + " (" + _newIndex + ")";
+                            return _newUsername;
+                        }
+                    }
+                    _newUsername = _username + " (" + _newIndex + ")";
+                    return _newUsername;
+                }
+            }
+
+        }
+        return _username;
+    }
 
     [PunRPC]
     public void CMDPlayerTurnInfo(int _actorId, float _rotAmount, float _targetSpeed)
@@ -257,6 +298,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         wheel.SetActive(true);
         gasSlider.SetActive(true);
     }
+
+    public void QuitGame()
+    {
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+        SceneManager.LoadScene(0);
+
+    }
+
+
 
 
 }

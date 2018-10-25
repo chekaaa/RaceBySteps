@@ -13,4 +13,12 @@ public class InGameNetManager : MonoBehaviourPunCallbacks
         Debug.LogWarning(cause.ToString());
         SceneManager.LoadScene(0);
     }
+
+    public override void OnLeftRoom()
+    {
+        if (GameManager.instance.isGameEnded)
+            return;
+
+        SceneManager.LoadScene(0);
+    }
 }

@@ -38,4 +38,5 @@ MonoBehaviour:
   - RPCChangeMovePhase
   - RPCUpdateLapDisplay
   - CMDMovePhaseEnded
+  - RPCFinishGame
   DisableAutoOpenWizard: 1
