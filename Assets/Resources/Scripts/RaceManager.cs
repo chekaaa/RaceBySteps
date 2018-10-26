@@ -54,6 +54,9 @@ public class RaceManager : MonoBehaviourPun
             positionList.Add(_playerId);
             int _pos = positionList.IndexOf(_playerId) + 1;
             IngameUiManager.instance.AddPlayerToLeaderBoard(_playerId, _pos);
+            photonView.RPC("RPCWaitingForEndRace", RpcTarget.All, _playerId);
+            GameManager.instance.carList[_playerId].GetComponent<CarInfo>().StopCar();
+
         }
         if (areAllFinished())
         {
@@ -64,6 +67,16 @@ public class RaceManager : MonoBehaviourPun
 
     }
 
+    [PunRPC]
+    public void RPCWaitingForEndRace(int _id)
+    {
+        if (_id == PhotonNetwork.LocalPlayer.ActorNumber)
+        {
+            IngameUiManager.instance.SetWaitingEndRace();
+        }
+
+
+    }
 
 
 

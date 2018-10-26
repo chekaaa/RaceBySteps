@@ -16,7 +16,6 @@ public class CarInfo : MonoBehaviourPun
 
 
 
-
     public void Init(int _ownerId, int _spriteIndex, string _ownerUsername)
     {
         ownerId = _ownerId;
@@ -28,6 +27,8 @@ public class CarInfo : MonoBehaviourPun
 
 
     }
+
+
 
     [PunRPC]
     public void RPCSyncInfo(int _spriteIndex, int _ownerId, string _ownerUsername)
@@ -42,5 +43,17 @@ public class CarInfo : MonoBehaviourPun
         GameManager.instance.carList.Add(_ownerId, this.gameObject);
         m_trajectoryDisplayer.Init();
         m_carBehaviour.Init();
+    }
+
+
+    public void StopCar()
+    {
+        photonView.RPC("RPCStopCar", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void RPCStopCar()
+    {
+        m_carBehaviour.enabled = false;
     }
 }
