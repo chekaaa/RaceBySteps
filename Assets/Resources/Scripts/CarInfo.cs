@@ -55,5 +55,7 @@ public class CarInfo : MonoBehaviourPun
     public void RPCStopCar()
     {
         m_carBehaviour.enabled = false;
+        m_trajectoryDisplayer.enabled = false;
+        m_trajectoryDisplayer.RemoveDots();
     }
 }

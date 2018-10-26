@@ -28,7 +28,7 @@ public class CheckpointCounter : MonoBehaviour
         if (other.tag == CP_TAG)
         {
             string _nextCpName = RaceManager.instance.cpList[m_nextCpIndex].name;
-            Debug.Log("Next Index :" + m_nextCpIndex + " | CPName: " + other.transform.name);
+            //   Debug.Log("Next Index :" + m_nextCpIndex + " | CPName: " + other.transform.name);
             if (_nextCpName == other.transform.name)
             {
                 if (m_nextCpIndex == 0)

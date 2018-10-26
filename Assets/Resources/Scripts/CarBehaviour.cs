@@ -45,16 +45,7 @@ public class CarBehaviour : MonoBehaviourPunCallbacks
         // }
     }
 
-    public void StopCar()
-    {
-        photonView.RPC("RPCStopCar", RpcTarget.All);
-    }
 
-    [PunRPC]
-    public void RPCStopCar()
-    {
-        this.enabled = false;
-    }
 
     void Update()
     {

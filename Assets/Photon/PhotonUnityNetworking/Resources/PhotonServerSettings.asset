@@ -40,4 +40,6 @@ MonoBehaviour:
   - CMDMovePhaseEnded
   - RPCFinishGame
   - RPCInit
+  - RPCWaitingForEndRace
+  - RPCStopCar
   DisableAutoOpenWizard: 1

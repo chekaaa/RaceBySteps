@@ -56,7 +56,7 @@ public class TrajectoryDisplayer : MonoBehaviourPun
         DrawTrajectory();
     }
 
-    void RemoveDots()
+    public void RemoveDots()
     {
         if (dotList != null)
         {
@@ -84,7 +84,7 @@ public class TrajectoryDisplayer : MonoBehaviourPun
         for (int i = 0; i <= amount; i++)
         {
             float rest = i % 5;
-            if (rest == 0 || i == amount) 
+            if (rest == 0 || i == amount)
             {
                 GameObject go = Instantiate(dotPrefab, dotGuide.position, Quaternion.identity) as GameObject;
                 dotList.Add(go);
