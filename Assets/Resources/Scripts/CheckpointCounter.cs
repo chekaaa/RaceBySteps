@@ -11,6 +11,8 @@ public class CheckpointCounter : MonoBehaviour
     private int m_lastCpIndex, m_nextCpIndex = 1;
     private CarInfo m_carInfo;
 
+
+
     private void Start()
     {
         m_carInfo = GetComponent<CarInfo>();
@@ -18,7 +20,7 @@ public class CheckpointCounter : MonoBehaviour
 
 
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (!PhotonNetwork.IsMasterClient)
             return;

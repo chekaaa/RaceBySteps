@@ -11,13 +11,14 @@ public class RaceManager : MonoBehaviourPun
     public LapDisplayer lapDisplayer;
 
     public Transform cpParent;
-    public List<Transform> cpList = new List<Transform>();
-    public int CPCount;
+    [HideInInspector] public List<Transform> cpList = new List<Transform>();
+    [HideInInspector] public int CPCount;
 
     public int TotalLaps = 3;
 
+
     private Dictionary<int, int> lapList = new Dictionary<int, int>();
-    private List<int> positionList = new List<int>();
+    public List<int> positionList = new List<int>();
 
 
     private void Awake()
@@ -51,6 +52,8 @@ public class RaceManager : MonoBehaviourPun
         if (ischeckeredFlag(_playerId))
         {
             positionList.Add(_playerId);
+            int _pos = positionList.IndexOf(_playerId) + 1;
+            IngameUiManager.instance.AddPlayerToLeaderBoard(_playerId, _pos);
         }
         if (areAllFinished())
         {
@@ -61,10 +64,9 @@ public class RaceManager : MonoBehaviourPun
 
     }
 
-    private void FillPositionsList()
-    {
-        //Fill position list on endgame UI
-    }
+
+
+
 
     [PunRPC]
     public void RPCFinishGame()

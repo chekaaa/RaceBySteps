@@ -22,7 +22,7 @@ public class TrackBoundChecker : MonoBehaviour
         m_carBehaviour = GetComponent<CarBehaviour>();
     }
 
-    private void OnTriggerExit2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.transform.tag == CHECKPOINT_TAG)
         {

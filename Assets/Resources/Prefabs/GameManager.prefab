@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114689764789003640}
   - component: {fileID: 114209024137350524}
   - component: {fileID: 114593912916013930}
+  - component: {fileID: 114316545220789756}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -57,6 +58,23 @@ MonoBehaviour:
   rotAmount: 0
   maxRot: 50
   gasSlider: {fileID: 0}
+--- !u!114 &114316545220789756
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1885716473471416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 518cb8897e03be541be1965911bc640e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lapDisplayer: {fileID: 0}
+  cpParent: {fileID: 0}
+  cpList: []
+  CPCount: 0
+  TotalLaps: 1
+  positionList: 
 --- !u!114 &114593912916013930
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -89,10 +107,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f46ad48df8f0c3438a74e46e9203e1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnDuration: 2
-  planPhaseDuration: 10
+  m_readyTimeLimit: 15
+  turnDuration: 1.8
+  planPhaseDuration: 7
   delta: 0.02
+  isGameEnded: 0
+  isWaiting: 0
   isMovePhase: 0
+  readyPanel: {fileID: 0}
+  waitingTxt: {fileID: 0}
+  readyBtn: {fileID: 0}
   turnButton: {fileID: 0}
   turnTimerTxt: {fileID: 0}
   wheel: {fileID: 0}
