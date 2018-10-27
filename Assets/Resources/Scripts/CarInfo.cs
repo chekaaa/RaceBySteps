@@ -54,6 +54,12 @@ public class CarInfo : MonoBehaviourPun
     [PunRPC]
     public void RPCStopCar()
     {
+        StartCoroutine(StopCarAfterMovingPhase());
+    }
+
+    IEnumerator StopCarAfterMovingPhase()
+    {
+        yield return new WaitUntil(() => !GameManager.instance.isMovePhase);
         m_carBehaviour.enabled = false;
         m_trajectoryDisplayer.enabled = false;
         m_trajectoryDisplayer.RemoveDots();

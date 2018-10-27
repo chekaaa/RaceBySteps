@@ -66,7 +66,7 @@ public class IngameUiManager : MonoBehaviourPun
     {
 
         string _username = GameManager.instance.carList[_id].GetComponent<CarInfo>().ownerUsername;
-        GameObject go = PhotonNetwork.Instantiate(PLAYER_POSITION_PREFAB,
+        GameObject go = PhotonNetwork.InstantiateSceneObject(PLAYER_POSITION_PREFAB,
         Vector3.zero, Quaternion.identity);
         go.GetComponent<PositionInfo>().Init(_position, _username);
     }

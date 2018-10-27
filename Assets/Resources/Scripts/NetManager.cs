@@ -117,7 +117,12 @@ public class NetManager : MonoBehaviourPunCallbacks
     public override void OnDisconnected(DisconnectCause cause)
     {
         m_isConnectedToMaster = false;
+        PhotonNetwork.ConnectUsingSettings();
     }
+
+
+
+
 
     public void ChangeUsername()
     {
