@@ -10,4 +10,9 @@ public class DeviceSettings : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
     }
 
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
 }
