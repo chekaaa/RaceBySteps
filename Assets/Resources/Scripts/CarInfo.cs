@@ -63,5 +63,9 @@ public class CarInfo : MonoBehaviourPun
         m_carBehaviour.enabled = false;
         m_trajectoryDisplayer.enabled = false;
         m_trajectoryDisplayer.RemoveDots();
+        if (PhotonNetwork.LocalPlayer.ActorNumber == ownerId)
+        {
+            CameraBehaviour.instance.ChangeSpectateCamera();
+        }
     }
 }
