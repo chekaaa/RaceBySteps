@@ -10,6 +10,7 @@ public class LapDisplayer : MonoBehaviour
     private void Start()
     {
         m_lapTxt = GetComponent<TMP_Text>();
+        m_lapTxt.text = "LAPS 0/" + RaceManager.instance.TotalLaps;
     }
 
     public void UpdateLapTxt(int _laps)

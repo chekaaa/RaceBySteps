@@ -52,6 +52,11 @@ public class RaceManager : MonoBehaviourPun
         if (ischeckeredFlag(_playerId))
         {
             positionList.Add(_playerId);
+            if (positionList.IndexOf(_playerId) == 0)
+            {
+                //First on finish. Start countdown for DNF
+
+            }
             int _pos = positionList.IndexOf(_playerId) + 1;
             IngameUiManager.instance.AddPlayerToLeaderBoard(_playerId, _pos);
             photonView.RPC("RPCWaitingForEndRace", RpcTarget.All, _playerId);
