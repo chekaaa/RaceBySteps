@@ -267,9 +267,9 @@ public class GameManager : MonoBehaviourPunCallbacks
                             return _newUsername;
                         }
                     }
-                    _newUsername = _username + " (" + _newIndex + ")";
-                    return _newUsername;
                 }
+                _newUsername = _username + " (1)";
+                return _newUsername;
             }
 
         }
