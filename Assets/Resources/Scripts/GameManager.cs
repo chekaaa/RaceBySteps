@@ -18,15 +18,18 @@ public class GameManager : MonoBehaviourPunCallbacks
     public float turnDuration = 5f;
     public float planPhaseDuration = 4f;
     public float delta = 0.02f;
+    public int DNFTurns = 5;
+    private int m_actualDNFTurns;
 
     private int m_turnsEnded = 0;
     private int m_movePhasesEnded = 0;
     private int m_playersReady = 0;
 
     private bool m_isStarted = false;
-    public bool isGameEnded = false;
-    public bool isWaiting = false;
-    public bool isMovePhase = false;
+    [HideInInspector] public bool isGameEnded = false;
+    [HideInInspector] public bool isWaiting = false;
+    [HideInInspector] public bool isMovePhase = false;
+    [HideInInspector] public bool isAPlayerFinished = false;
 
 
     public GameObject readyPanel, waitingTxt, readyBtn;
@@ -60,6 +63,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SpawnCars();
         }
+        m_actualDNFTurns = DNFTurns;
         m_spawnIndex = 0;
         turnTimerTxt.text = (int)m_planPhaseTimer + "";
         m_planPhaseTimer = planPhaseDuration;
@@ -90,6 +94,17 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (areAllTurnsEnded())
             {
+
+                if (isAPlayerFinished)
+                {
+                    m_actualDNFTurns--;
+                    if (m_actualDNFTurns < 0)
+                    {
+                        FillDNFCars();
+                        RaceManager.instance.CallFinishGame();
+                        return;
+                    }
+                }
                 photonView.RPC("RPCChangeMovePhase", RpcTarget.All);
                 //isMovePhase = true;
             }
@@ -120,6 +135,19 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
     }
+    private void FillDNFCars()
+    {
+        foreach (GameObject car in carList.Values)
+        {
+            CarInfo _info = car.GetComponent<CarInfo>();
+            if (!_info.isFinished)
+            {
+                _info.StopCar();
+                RaceManager.instance.AddCarToPositionList(_info.ownerId, -1f);
+            }
+        }
+    }
+
     [PunRPC]
     public void RPCChangeMovePhase()
     {

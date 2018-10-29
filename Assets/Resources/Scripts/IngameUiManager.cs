@@ -12,7 +12,8 @@ public class IngameUiManager : MonoBehaviourPun
     public GameObject playerUIPanel, readyPanel, scorePanel, optionsPanel, waitingEndRacePanel;
     public Transform playerPositionContent;
 
-    private const string PLAYER_POSITION_PREFAB = "PlayerTxtPrefab";
+    //private const string PLAYER_POSITION_PREFAB = "PlayerTxtPrefab";
+    public GameObject positionPrefab;
 
     private void Awake()
     {
@@ -62,13 +63,19 @@ public class IngameUiManager : MonoBehaviourPun
         waitingEndRacePanel.SetActive(true);
     }
 
-    public void AddPlayerToLeaderBoard(int _id, int _position)
+    public void AddPlayerToLeaderBoard(int _id, int _position, float _raceTime)
+    {
+        string _username = GameManager.instance.carList[_id].GetComponent<CarInfo>().ownerUsername;
+        photonView.RPC("RPCAddPlayerToLeaderboard", RpcTarget.AllBuffered, _id, _position, _raceTime, _username);
+    }
+
+    [PunRPC]
+    public void RPCAddPlayerToLeaderboard(int _id, int _position, float _raceTime, string _username)
     {
 
-        string _username = GameManager.instance.carList[_id].GetComponent<CarInfo>().ownerUsername;
-        GameObject go = PhotonNetwork.InstantiateSceneObject(PLAYER_POSITION_PREFAB,
+        GameObject go = Instantiate(positionPrefab,
         Vector3.zero, Quaternion.identity);
-        go.GetComponent<PositionInfo>().Init(_position, _username);
+        go.GetComponent<PositionInfo>().Init(_position, _username, _raceTime);
     }
 
 }

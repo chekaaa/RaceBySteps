@@ -16,9 +16,10 @@ public class RaceManager : MonoBehaviourPun
 
     public int TotalLaps = 3;
 
+    private float m_lapTime = 0f;
 
     private Dictionary<int, int> lapList = new Dictionary<int, int>();
-    public List<int> positionList = new List<int>();
+    public List<PlacingInfo> positionList = new List<PlacingInfo>();
 
 
     private void Awake()
@@ -44,6 +45,14 @@ public class RaceManager : MonoBehaviourPun
         FillLapList();
     }
 
+    private void Update()
+    {
+        if (GameManager.instance.isMovePhase)
+        {
+            m_lapTime += Time.deltaTime;
+        }
+    }
+
     public void AddLapToCar(int _playerId)
     {
         lapList[_playerId]++;
@@ -51,25 +60,36 @@ public class RaceManager : MonoBehaviourPun
 
         if (ischeckeredFlag(_playerId))
         {
-            positionList.Add(_playerId);
-            if (positionList.IndexOf(_playerId) == 0)
-            {
-                //First on finish. Start countdown for DNF
 
-            }
-            int _pos = positionList.IndexOf(_playerId) + 1;
-            IngameUiManager.instance.AddPlayerToLeaderBoard(_playerId, _pos);
-            photonView.RPC("RPCWaitingForEndRace", RpcTarget.All, _playerId);
-            GameManager.instance.carList[_playerId].GetComponent<CarInfo>().StopCar();
-
+            AddCarToPositionList(_playerId, m_lapTime);
         }
         if (areAllFinished())
         {
             //EndGame - Display positions
             Debug.Log("Race ended");
-            photonView.RPC("RPCFinishGame", RpcTarget.All);
+            CallFinishGame();
         }
 
+    }
+    public void CallFinishGame()
+    {
+        photonView.RPC("RPCFinishGame", RpcTarget.All);
+    }
+
+    public void AddCarToPositionList(int _ownerId, float _raceTime)
+    {
+        positionList.Add(new PlacingInfo(_ownerId, _raceTime));
+        if (positionList.IndexOf(new PlacingInfo(_ownerId, _raceTime)) == 0)
+        {
+            //First on finish. Start countdown for DNF
+            GameManager.instance.isAPlayerFinished = true;
+        }
+        // int _pos = positionList.IndexOf(new PlacingInfo(_ownerId, _raceTime)) + 1;
+        int _pos = positionList.FindIndex(x => x.ownerId == _ownerId) + 1;
+        //Debug.Log("Position: " + _pos);
+        IngameUiManager.instance.AddPlayerToLeaderBoard(_ownerId, _pos, _raceTime);
+        photonView.RPC("RPCWaitingForEndRace", RpcTarget.All, _ownerId);
+        GameManager.instance.carList[_ownerId].GetComponent<CarInfo>().StopCar();
     }
 
     [PunRPC]
@@ -146,6 +166,20 @@ public class RaceManager : MonoBehaviourPun
         }
         CPCount = cpList.Count;
     }
+}
+
+public class PlacingInfo
+{
+    public int ownerId;
+    public float raceTime;
+
+    public PlacingInfo(int _ownerId, float _racetime)
+    {
+        this.ownerId = _ownerId;
+        this.raceTime = _racetime;
+    }
+
+
 }
 
 

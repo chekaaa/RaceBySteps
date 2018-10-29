@@ -7,6 +7,7 @@ public class CarInfo : MonoBehaviourPun
 {
     public int ownerId;
     public string ownerUsername;
+    public bool isFinished = false;
 
     [SerializeField] private CarBehaviour m_carBehaviour;
     [SerializeField] private TrajectoryDisplayer m_trajectoryDisplayer;
@@ -63,6 +64,7 @@ public class CarInfo : MonoBehaviourPun
         m_carBehaviour.enabled = false;
         m_trajectoryDisplayer.enabled = false;
         m_trajectoryDisplayer.RemoveDots();
+        isFinished = true;
         if (PhotonNetwork.LocalPlayer.ActorNumber == ownerId)
         {
             CameraBehaviour.instance.ChangeSpectateCamera();

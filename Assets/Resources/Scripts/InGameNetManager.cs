@@ -16,9 +16,29 @@ public class InGameNetManager : MonoBehaviourPunCallbacks
 
     public override void OnLeftRoom()
     {
+        Debug.Log("@OnLeftRoom");
         if (GameManager.instance.isGameEnded)
             return;
 
         SceneManager.LoadScene(0);
     }
+
+    public override void OnMasterClientSwitched(Player newMasterClient)
+    {
+        if (PhotonNetwork.InRoom && !GameManager.instance.isGameEnded)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+    }
+
+    // void OnApplicationQuit()
+    // {
+    //     Debug.Log("Application ending after " + Time.time + " seconds");
+    //     if (PhotonNetwork.IsConnected)
+    //     {
+    //         PhotonNetwork.Disconnect();
+    //     }
+    // }
+
+
 }

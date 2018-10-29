@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 114209024137350524}
   - component: {fileID: 114593912916013930}
   - component: {fileID: 114316545220789756}
+  - component: {fileID: 114598944808909346}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -74,7 +75,6 @@ MonoBehaviour:
   cpList: []
   CPCount: 0
   TotalLaps: 1
-  positionList: 
 --- !u!114 &114593912916013930
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -96,6 +96,17 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
+--- !u!114 &114598944808909346
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1885716473471416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6faeb8cddbe3a87488e9e58f2042b7c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114689764789003640
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -111,9 +122,11 @@ MonoBehaviour:
   turnDuration: 1.8
   planPhaseDuration: 7
   delta: 0.02
+  DNFTurns: 4
   isGameEnded: 0
   isWaiting: 0
   isMovePhase: 0
+  isAPlayerFinished: 0
   readyPanel: {fileID: 0}
   waitingTxt: {fileID: 0}
   readyBtn: {fileID: 0}

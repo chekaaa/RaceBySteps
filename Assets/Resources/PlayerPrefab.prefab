@@ -207,6 +207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ownerId: 0
   ownerUsername: 
+  isFinished: 0
   m_carBehaviour: {fileID: 114469673634636352}
   m_trajectoryDisplayer: {fileID: 114310085837447858}
   m_spriteRenderer: {fileID: 212853808804926776}

@@ -4,21 +4,39 @@ using UnityEngine;
 using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 
 public class PositionInfo : MonoBehaviourPun
 {
 
     public TMP_Text infoTxt;
 
-    public void Init(int _position, string _username)
+    public void Init(int _position, string _username, float _raceTime)
     {
-        photonView.RPC("RPCInit", RpcTarget.All, _position, _username);
+        string formatedTime = FormattTimeFromSeconds(_raceTime);
+
+        if (_raceTime == -1)
+        {
+            infoTxt.text = "DNF.- " + _username + "   -   -";
+        }
+        else
+        {
+            infoTxt.text = _position + ".- " + _username + "   -   " + formatedTime;
+        }
+        this.transform.SetParent(IngameUiManager.instance.playerPositionContent);
     }
 
-    [PunRPC]
-    public void RPCInit(int _position, string _username)
+
+
+    private string FormattTimeFromSeconds(float _seconds)
     {
-        infoTxt.text = _position + ".- " + _username;
-        this.transform.SetParent(IngameUiManager.instance.playerPositionContent);
+        TimeSpan t = TimeSpan.FromSeconds(_seconds);
+
+        string answer = string.Format("{0:D2}m:{1:D2}s:{2:D3}ms",
+                        t.Minutes,
+                        t.Seconds,
+                        t.Milliseconds);
+
+        return answer;
     }
 }
