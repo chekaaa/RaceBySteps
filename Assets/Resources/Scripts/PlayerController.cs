@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
             return;
 
         rotAmount = -SimpleInput.GetAxis("Horizontal") * maxRot;
-        targetSpeed = PlayerController.instance.gasSlider.value;
+        //targetSpeed = PlayerController.instance.gasSlider.value;
 
         if (m_isGasPedalDown)
         {
@@ -47,6 +47,8 @@ public class PlayerController : MonoBehaviour
             float tmpSpeed = targetSpeed - maxGas * Time.deltaTime;
             targetSpeed = Mathf.Clamp(tmpSpeed, 0, maxGas);
         }
+
+        Debug.Log("Target speed: " + targetSpeed);
     }
 
     public void OnClickBreakPedal(bool isBreakPedalDown)
