@@ -14,6 +14,11 @@ public class IngameUiManager : MonoBehaviourPun
 
     //private const string PLAYER_POSITION_PREFAB = "PlayerTxtPrefab";
     public GameObject positionPrefab;
+    public Transform arrow, arrowTarget;
+
+    public float maxRot = 90;
+
+
 
     private void Awake()
     {
@@ -77,5 +82,8 @@ public class IngameUiManager : MonoBehaviourPun
         Vector3.zero, Quaternion.identity);
         go.GetComponent<PositionInfo>().Init(_position, _username, _raceTime);
     }
+
+
+
 
 }
