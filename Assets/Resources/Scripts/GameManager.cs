@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Button turnButton;
     public TMP_Text turnTimerTxt;
     public GameObject wheel, gasSlider;
+    public CarBehaviour localCar;
 
     public Dictionary<int, GameObject> carList = new Dictionary<int, GameObject>();
     [SerializeField] private Transform m_spawnParent;
@@ -239,7 +240,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         PlayerController.instance.targetSpeed);
 
         wheel.SetActive(false);
-        gasSlider.SetActive(false);
+        // gasSlider.SetActive(false);
         isWaiting = true;
         m_planPhaseTimer = planPhaseDuration;
         turnButton.interactable = false;
@@ -324,7 +325,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         isWaiting = false;
         turnButton.interactable = true;
         wheel.SetActive(true);
-        gasSlider.SetActive(true);
+        // gasSlider.SetActive(true);
     }
 
     public void QuitGame()

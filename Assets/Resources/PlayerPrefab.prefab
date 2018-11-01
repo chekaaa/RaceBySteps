@@ -71,7 +71,7 @@ Transform:
   m_GameObject: {fileID: 1639322013924170}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 4.73, y: -4.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
   m_Children:
   - {fileID: 4311432049288996}
   m_Father: {fileID: 0}
@@ -172,7 +172,8 @@ MonoBehaviour:
   rotSpeed: 0
   rotLock: 0.004
   speed: 0
-  acceleration: 0.04
+  acceleration: 0.03
+  maxSpeed: 0.1
 --- !u!114 &114492041977804152
 MonoBehaviour:
   m_ObjectHideFlags: 1

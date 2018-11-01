@@ -32,6 +32,29 @@ public class IngameUiManager : MonoBehaviourPun
         }
     }
 
+    private void Update()
+    {
+        if (GameManager.instance.localCar == null)
+            return;
+
+        UpdateArrow();
+        UpdatetargetArrow();
+    }
+
+    private void UpdateArrow()
+    {
+        float ang = Mathf.Lerp(-maxRot, maxRot, Mathf.InverseLerp(0f, PlayerController.instance.maxGas,
+         GameManager.instance.localCar.speed));
+        arrow.eulerAngles = new Vector3(0f, 0f, -ang);
+    }
+
+    private void UpdatetargetArrow()
+    {
+        float ang = Mathf.Lerp(-maxRot, maxRot, Mathf.InverseLerp(0f, PlayerController.instance.maxGas,
+         PlayerController.instance.targetSpeed));
+        arrowTarget.eulerAngles = new Vector3(0f, 0f, -ang);
+    }
+
     public void SetEndgameUI()
     {
         readyPanel.SetActive(false);

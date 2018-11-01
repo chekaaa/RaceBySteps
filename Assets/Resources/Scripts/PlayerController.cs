@@ -39,12 +39,12 @@ public class PlayerController : MonoBehaviour
         if (m_isGasPedalDown)
         {
             // Debug.Log("Pedal clicked");
-            float tmpSpeed = targetSpeed + maxGas * Time.deltaTime;
+            float tmpSpeed = targetSpeed + (maxGas / 2f) * Time.deltaTime;
             targetSpeed = Mathf.Clamp(tmpSpeed, 0, maxGas);
         }
         else if (m_isBreakPedalDown)
         {
-            float tmpSpeed = targetSpeed - maxGas * Time.deltaTime;
+            float tmpSpeed = targetSpeed - (maxGas / 2f) * Time.deltaTime;
             targetSpeed = Mathf.Clamp(tmpSpeed, 0, maxGas);
         }
 

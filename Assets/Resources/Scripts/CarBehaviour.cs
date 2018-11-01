@@ -13,6 +13,8 @@ public class CarBehaviour : MonoBehaviourPunCallbacks
     public float rotLock = 0.05f;
     [HideInInspector] public float speed = 0f;
     public float acceleration = .05f;
+    public float maxSpeed = 0.1f;
+
     private float m_rotAmount = 0f;
 
     private float m_targetSpeed = 0f;
