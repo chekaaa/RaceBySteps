@@ -10,6 +10,7 @@ public class CameraBehaviour : MonoBehaviour
 
     private Animator m_animator;
 
+
     [HideInInspector] public Transform target;
     public Transform spectatorTarget;
     [SerializeField] float targetSizePlaying = 10, targetSizeSpectator = 15;
@@ -28,6 +29,7 @@ public class CameraBehaviour : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
     }
 
     private void LateUpdate()

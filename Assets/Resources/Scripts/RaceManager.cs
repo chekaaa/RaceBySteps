@@ -79,7 +79,7 @@ public class RaceManager : MonoBehaviourPun
     public void AddCarToPositionList(int _ownerId, float _raceTime)
     {
         positionList.Add(new PlacingInfo(_ownerId, _raceTime));
-        if (positionList.IndexOf(new PlacingInfo(_ownerId, _raceTime)) == 0)
+        if (positionList.FindIndex(x => x.ownerId == _ownerId) == 0)
         {
             //First on finish. Start countdown for DNF
             GameManager.instance.isAPlayerFinished = true;
