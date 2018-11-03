@@ -21,6 +21,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     public int DNFTurns = 5;
     private int m_actualDNFTurns;
 
+    private float m_timeOutDuration = 4f;
+    private float m_actualTimeOutDuration = 0f;
+    private List<int> m_idOfTurnEnded = new List<int>();
     private int m_turnsEnded = 0;
     private int m_movePhasesEnded = 0;
     private int m_playersReady = 0;
@@ -91,14 +94,17 @@ public class GameManager : MonoBehaviourPunCallbacks
             return;
         }
 
-        if (PhotonNetwork.IsMasterClient)
-        {
-            if (areAllTurnsEnded())
-            {
 
-                if (isAPlayerFinished)
+
+
+        if (areAllTurnsEnded())
+        {
+            m_idOfTurnEnded.Clear();
+            if (isAPlayerFinished)
+            {
+                m_actualDNFTurns--;
+                if (PhotonNetwork.IsMasterClient)
                 {
-                    m_actualDNFTurns--;
                     if (m_actualDNFTurns < 0)
                     {
                         FillDNFCars();
@@ -106,10 +112,15 @@ public class GameManager : MonoBehaviourPunCallbacks
                         return;
                     }
                 }
-                photonView.RPC("RPCChangeMovePhase", RpcTarget.All);
-                //isMovePhase = true;
             }
+            if (PhotonNetwork.IsMasterClient)
+            {
+                photonView.RPC("RPCChangeMovePhase", RpcTarget.All);
+            }
+            //isMovePhase = true;
         }
+
+
 
         if (isMovePhase)
         {
@@ -172,7 +183,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private bool areAllMovePhasesEnded()
     {
-        if (m_movePhasesEnded >= carList.Count)
+        if (m_movePhasesEnded >= PhotonNetwork.CurrentRoom.PlayerCount)
         {
             return true;
         }
@@ -208,7 +219,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private bool areAllPlayersReady()
     {
-        if (m_playersReady == carList.Count)
+        if (m_playersReady == PhotonNetwork.CurrentRoom.PlayerCount)
         {
             return true;
         }
@@ -220,7 +231,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private bool areAllTurnsEnded()
     {
-        if (m_turnsEnded == carList.Count)
+        if (m_turnsEnded == PhotonNetwork.CurrentRoom.PlayerCount)
         {
             m_turnsEnded = 0;
             return true;
@@ -233,7 +244,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void CompleteTurn()
     {
-        photonView.RPC("CMDPlayerTurnInfo",
+        photonView.RPC("RPCPlayerTurnInfo",
          RpcTarget.All,
         PhotonNetwork.LocalPlayer.ActorNumber,
          PlayerController.instance.rotAmount,
@@ -265,7 +276,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         foreach (var _player in PhotonNetwork.PlayerList)
         {
             Transform _spawn = m_spawnList[m_spawnIndex];
-            GameObject go = PhotonNetwork.Instantiate(CARPREFAB_NAME, _spawn.position, _spawn.rotation);
+            GameObject go = PhotonNetwork.InstantiateSceneObject(CARPREFAB_NAME, _spawn.position, _spawn.rotation);
             //carList.Add(_player.ActorNumber, go);
             go.GetComponent<CarInfo>().Init(_player.ActorNumber, m_spawnIndex,
             GetUniqueUsername(_player.NickName));
@@ -305,17 +316,23 @@ public class GameManager : MonoBehaviourPunCallbacks
         return _username;
     }
 
+    public void StopMovementOnDisconnectedPLayer(int _ownerId)
+    {
+        photonView.RPC("RPCPlayerTurnInfo", RpcTarget.All, _ownerId, 0f, 0f);
+    }
+
     [PunRPC]
-    public void CMDPlayerTurnInfo(int _actorId, float _rotAmount, float _targetSpeed)
+    public void RPCPlayerTurnInfo(int _actorId, float _rotAmount, float _targetSpeed)
     {
         if (carList == null)
             return;
 
         carList[_actorId].GetComponent<CarBehaviour>().SetMoveValues(_rotAmount, _targetSpeed);
-        if (PhotonNetwork.IsMasterClient)
-        {
-            m_turnsEnded++;
-        }
+        // if (PhotonNetwork.IsMasterClient)
+        // {
+        m_idOfTurnEnded.Add(_actorId);
+        m_turnsEnded++;
+        // }
     }
 
     [PunRPC]

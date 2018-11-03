@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
             targetSpeed = Mathf.Clamp(tmpSpeed, 0, maxGas);
         }
 
-        Debug.Log("Target speed: " + targetSpeed);
+
     }
 
     public void OnClickBreakPedal(bool isBreakPedalDown)

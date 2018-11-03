@@ -38,8 +38,8 @@ public class RaceManager : MonoBehaviourPun
 
     private void Start()
     {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
+        // if (!PhotonNetwork.IsMasterClient)
+        //     return;
 
         FillCpList();
         FillLapList();
@@ -151,8 +151,9 @@ public class RaceManager : MonoBehaviourPun
 
     private void FillLapList()
     {
-        foreach (int i in GameManager.instance.carList.Keys)
+        foreach (int i in PhotonNetwork.CurrentRoom.Players.Keys)
         {
+            Debug.Log("ACtorID :" + i);
             lapList.Add(i, 0);
         }
     }

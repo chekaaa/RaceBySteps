@@ -23,12 +23,23 @@ public class InGameNetManager : MonoBehaviourPunCallbacks
         SceneManager.LoadScene(0);
     }
 
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        Debug.Log("@OnPlayerLeftRoom Player: " + otherPlayer.ActorNumber);
+        GameManager.instance.StopMovementOnDisconnectedPLayer(otherPlayer.ActorNumber);
+    }
+
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
-        if (PhotonNetwork.InRoom && !GameManager.instance.isGameEnded)
-        {
-            PhotonNetwork.LeaveRoom();
-        }
+        // if (PhotonNetwork.InRoom && !GameManager.instance.isGameEnded)
+        // {
+        //     PhotonNetwork.LeaveRoom();
+        // }
+
+        Debug.Log("master Client Switched");
     }
 
     // void OnApplicationQuit()

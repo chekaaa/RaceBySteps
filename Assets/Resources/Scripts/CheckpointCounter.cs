@@ -22,8 +22,8 @@ public class CheckpointCounter : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (!PhotonNetwork.IsMasterClient)
-            return;
+        // if (!PhotonNetwork.IsMasterClient)
+        //     return;
 
         if (other.tag == CP_TAG)
         {

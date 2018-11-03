@@ -43,4 +43,5 @@ MonoBehaviour:
   - RPCWaitingForEndRace
   - RPCStopCar
   - RPCAddPlayerToLeaderboard
+  - RPCPlayerTurnInfo
   DisableAutoOpenWizard: 1
