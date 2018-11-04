@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using TMPro;
+using UnityEngine.UI;
 
 public class IngameUiManager : MonoBehaviourPun
 {
@@ -13,7 +14,10 @@ public class IngameUiManager : MonoBehaviourPun
     public GameObject playerUIPanel, readyPanel, scorePanel, optionsPanel, waitingEndRacePanel,
     infoPanel;
     public Transform playerPositionContent;
-    public TMP_Text dnfCounterTxt;
+    public TMP_Text dnfCounterTxt, planPhaseTxt, movingPhaseTxt;
+    public Image planPhaseImg, movingPhaseImg;
+
+    private Color planPhaseImgColor, planPhaseTxtColor, movingphaseImgColor, movingPhaseTxtColor;
 
     //private const string PLAYER_POSITION_PREFAB = "PlayerTxtPrefab";
     public GameObject positionPrefab;
@@ -33,6 +37,11 @@ public class IngameUiManager : MonoBehaviourPun
         {
             Destroy(this.gameObject);
         }
+
+        movingphaseImgColor = movingPhaseImg.color;
+        movingPhaseTxtColor = movingPhaseTxt.color;
+        planPhaseImgColor = planPhaseImg.color;
+        planPhaseTxtColor = planPhaseTxt.color;
     }
 
     private void Update()
@@ -43,6 +52,34 @@ public class IngameUiManager : MonoBehaviourPun
         UpdateArrow();
         UpdatetargetArrow();
         UpdateTurnsLeftDisplay();
+        UpdatePhaseIndicators();
+    }
+
+    private void UpdatePhaseIndicators()
+    {
+        Color _tmpColor;
+        if (GameManager.instance.isMovePhase)
+        {
+            _tmpColor = planPhaseImgColor;
+            _tmpColor.a = 50f;
+            planPhaseImg.color = _tmpColor;
+            _tmpColor = planPhaseTxtColor;
+            _tmpColor.a = 50f;
+            planPhaseTxt.color = _tmpColor;
+            movingPhaseImg.color = movingphaseImgColor;
+            movingPhaseTxt.color = movingPhaseTxtColor;
+        }
+        else
+        {
+            _tmpColor = movingphaseImgColor;
+            _tmpColor.a = 50f;
+            movingPhaseImg.color = _tmpColor;
+            _tmpColor = movingPhaseTxtColor;
+            _tmpColor.a = 50f;
+            movingPhaseTxt.color = _tmpColor;
+            planPhaseImg.color = planPhaseImgColor;
+            planPhaseTxt.color = planPhaseTxtColor;
+        }
     }
 
     private void UpdateArrow()
