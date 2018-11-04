@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject readyPanel, waitingTxt, readyBtn;
     public Button turnButton;
     public TMP_Text turnTimerTxt;
-    public GameObject wheel;
+    public GameObject wheel, gasPedal, breakPedal;
     [HideInInspector] public CarBehaviour localCar;
 
     public Dictionary<int, GameObject> carList = new Dictionary<int, GameObject>();
@@ -262,6 +262,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         PlayerController.instance.targetSpeed);
 
         wheel.SetActive(false);
+        gasPedal.SetActive(false);
+        breakPedal.SetActive(false);
+        turnTimerTxt.gameObject.SetActive(false);
         // gasSlider.SetActive(false);
         isWaiting = true;
         m_planPhaseTimer = planPhaseDuration;
@@ -353,6 +356,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         isWaiting = false;
         turnButton.interactable = true;
         wheel.SetActive(true);
+        gasPedal.SetActive(true);
+        breakPedal.SetActive(true);
+        turnTimerTxt.gameObject.SetActive(true);
         // gasSlider.SetActive(true);
     }
 
