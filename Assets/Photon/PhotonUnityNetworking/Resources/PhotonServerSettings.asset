@@ -44,4 +44,5 @@ MonoBehaviour:
   - RPCStopCar
   - RPCAddPlayerToLeaderboard
   - RPCPlayerTurnInfo
+  - RPCMovePhaseEnded
   DisableAutoOpenWizard: 1

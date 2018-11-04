@@ -126,7 +126,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             m_steps += delta;
             if (m_steps >= turnDuration)
             {
-                photonView.RPC("CMDMovePhaseEnded", RpcTarget.MasterClient);
+                photonView.RPC("RPCMovePhaseEnded", RpcTarget.All);
                 isMovePhase = false;
                 m_steps = 0f;
                 if (isAPlayerFinished)
@@ -179,16 +179,20 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
     [PunRPC]
-    public void CMDMovePhaseEnded()
+    public void RPCMovePhaseEnded()
     {
         m_movePhasesEnded++;
 
         if (areAllMovePhasesEnded())
         {
-            photonView.RPC("RPCChangeToPlanPhase", RpcTarget.AllViaServer);
+            if (PhotonNetwork.IsMasterClient)
+            {
+                photonView.RPC("RPCChangeToPlanPhase", RpcTarget.AllViaServer);
+            }
             m_movePhasesEnded = 0;
 
         }
+
 
     }
 
