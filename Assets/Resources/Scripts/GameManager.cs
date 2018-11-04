@@ -18,11 +18,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     public float turnDuration = 5f;
     public float planPhaseDuration = 4f;
     public float delta = 0.02f;
-    public int DNFTurns = 5;
-    private int m_actualDNFTurns;
+    public int DNFTurns = 10;
+    public int DNFTurnsAfterFinish = 4;
+    public int actualDNFTurns;
 
-    private float m_timeOutDuration = 4f;
-    private float m_actualTimeOutDuration = 0f;
+
     private List<int> m_idOfTurnEnded = new List<int>();
     private int m_turnsEnded = 0;
     private int m_movePhasesEnded = 0;
@@ -38,8 +38,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject readyPanel, waitingTxt, readyBtn;
     public Button turnButton;
     public TMP_Text turnTimerTxt;
-    public GameObject wheel, gasSlider;
-    public CarBehaviour localCar;
+    public GameObject wheel;
+    [HideInInspector] public CarBehaviour localCar;
 
     public Dictionary<int, GameObject> carList = new Dictionary<int, GameObject>();
     [SerializeField] private Transform m_spawnParent;
@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             SpawnCars();
         }
-        m_actualDNFTurns = DNFTurns;
+        actualDNFTurns = DNFTurns;
         m_spawnIndex = 0;
         turnTimerTxt.text = (int)m_planPhaseTimer + "";
         m_planPhaseTimer = planPhaseDuration;
@@ -100,23 +100,20 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (areAllTurnsEnded())
         {
             m_idOfTurnEnded.Clear();
-            if (isAPlayerFinished)
-            {
-                m_actualDNFTurns--;
-                if (PhotonNetwork.IsMasterClient)
-                {
-                    if (m_actualDNFTurns < 0)
-                    {
-                        FillDNFCars();
-                        RaceManager.instance.CallFinishGame();
-                        return;
-                    }
-                }
-            }
+            actualDNFTurns--;
+
+
+            // if (PhotonNetwork.IsMasterClient)
+            // {
+
+
+
+            // }
             if (PhotonNetwork.IsMasterClient)
             {
                 photonView.RPC("RPCChangeMovePhase", RpcTarget.All);
             }
+
             //isMovePhase = true;
         }
 
@@ -132,6 +129,20 @@ public class GameManager : MonoBehaviourPunCallbacks
                 photonView.RPC("CMDMovePhaseEnded", RpcTarget.MasterClient);
                 isMovePhase = false;
                 m_steps = 0f;
+                if (isAPlayerFinished)
+                {
+                    if (actualDNFTurns > DNFTurnsAfterFinish)
+                    {
+                        actualDNFTurns = DNFTurnsAfterFinish;
+                    }
+
+                }
+                if (actualDNFTurns < 1)
+                {
+                    FillDNFCars();
+                    RaceManager.instance.CallFinishGame();
+                    return;
+                }
             }
             // }
 

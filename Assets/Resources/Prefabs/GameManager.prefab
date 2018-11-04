@@ -57,6 +57,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetSpeed: 0
   rotAmount: 0
+  maxGas: 0.1
   maxRot: 50
   gasSlider: {fileID: 0}
 --- !u!114 &114316545220789756
@@ -74,7 +75,7 @@ MonoBehaviour:
   cpParent: {fileID: 0}
   cpList: []
   CPCount: 0
-  TotalLaps: 1
+  TotalLaps: 2
 --- !u!114 &114593912916013930
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -122,7 +123,9 @@ MonoBehaviour:
   turnDuration: 1.8
   planPhaseDuration: 7
   delta: 0.02
-  DNFTurns: 4
+  DNFTurns: 30
+  DNFTurnsAfterFinish: 7
+  actualDNFTurns: 0
   isGameEnded: 0
   isWaiting: 0
   isMovePhase: 0
@@ -133,5 +136,5 @@ MonoBehaviour:
   turnButton: {fileID: 0}
   turnTimerTxt: {fileID: 0}
   wheel: {fileID: 0}
-  gasSlider: {fileID: 0}
+  localCar: {fileID: 0}
   m_spawnParent: {fileID: 0}

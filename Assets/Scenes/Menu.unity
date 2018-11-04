@@ -370,7 +370,7 @@ MonoBehaviour:
   findMatchBtn: {fileID: 1002395091}
   usernameInput: {fileID: 1277328200}
   m_maxPlayers: 2
-  m_gameVersion: 0.3
+  m_gameVersion: 0.5
 --- !u!4 &383739736
 Transform:
   m_ObjectHideFlags: 0

@@ -40,8 +40,9 @@ public class CarInfo : MonoBehaviourPun
         if (_ownerId == PhotonNetwork.LocalPlayer.ActorNumber)
         {
             CameraBehaviour.instance.target = this.transform;
+            GameManager.instance.localCar = GetComponent<CarBehaviour>();
         }
-        GameManager.instance.localCar = GetComponent<CarBehaviour>();
+
         GameManager.instance.carList.Add(_ownerId, this.gameObject);
         m_trajectoryDisplayer.Init();
         m_carBehaviour.Init();

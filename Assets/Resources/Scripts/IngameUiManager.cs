@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using TMPro;
 
 public class IngameUiManager : MonoBehaviourPun
 {
 
     public static IngameUiManager instance;
 
-    public GameObject playerUIPanel, readyPanel, scorePanel, optionsPanel, waitingEndRacePanel;
+    public GameObject playerUIPanel, readyPanel, scorePanel, optionsPanel, waitingEndRacePanel,
+    infoPanel;
     public Transform playerPositionContent;
+    public TMP_Text dnfCounterTxt;
 
     //private const string PLAYER_POSITION_PREFAB = "PlayerTxtPrefab";
     public GameObject positionPrefab;
@@ -39,19 +42,24 @@ public class IngameUiManager : MonoBehaviourPun
 
         UpdateArrow();
         UpdatetargetArrow();
+        UpdateTurnsLeftDisplay();
     }
 
     private void UpdateArrow()
     {
+        // Debug.Log("Update arrow speed: " + GameManager.instance.localCar.speed);
         float ang = Mathf.Lerp(-maxRot, maxRot, Mathf.InverseLerp(0f, PlayerController.instance.maxGas,
          GameManager.instance.localCar.speed));
+        // Debug.Log("Update arrow ang: " + ang);
         arrow.eulerAngles = new Vector3(0f, 0f, -ang);
     }
 
     private void UpdatetargetArrow()
     {
+        // Debug.Log("Update targetArrow speed: " + GameManager.instance.localCar.speed);
         float ang = Mathf.Lerp(-maxRot, maxRot, Mathf.InverseLerp(0f, PlayerController.instance.maxGas,
          PlayerController.instance.targetSpeed));
+        // Debug.Log("Update targetArrow ang: " + ang);
         arrowTarget.eulerAngles = new Vector3(0f, 0f, -ang);
     }
 
@@ -62,6 +70,7 @@ public class IngameUiManager : MonoBehaviourPun
         scorePanel.SetActive(true);
         optionsPanel.SetActive(false);
         waitingEndRacePanel.SetActive(false);
+        infoPanel.SetActive(false);
     }
 
     public void SetOptionsUI()
@@ -71,6 +80,7 @@ public class IngameUiManager : MonoBehaviourPun
         scorePanel.SetActive(false);
         optionsPanel.SetActive(true);
         waitingEndRacePanel.SetActive(false);
+        infoPanel.SetActive(true);
     }
 
     public void SetPlayerUI()
@@ -80,6 +90,7 @@ public class IngameUiManager : MonoBehaviourPun
         scorePanel.SetActive(false);
         optionsPanel.SetActive(false);
         waitingEndRacePanel.SetActive(false);
+        infoPanel.SetActive(true);
     }
 
     public void SetWaitingEndRace()
@@ -89,12 +100,21 @@ public class IngameUiManager : MonoBehaviourPun
         scorePanel.SetActive(false);
         optionsPanel.SetActive(false);
         waitingEndRacePanel.SetActive(true);
+        infoPanel.SetActive(true);
+    }
+
+    private void UpdateTurnsLeftDisplay()
+    {
+        dnfCounterTxt.text = "TURNS LEFT: " + GameManager.instance.actualDNFTurns;
     }
 
     public void AddPlayerToLeaderBoard(int _id, int _position, float _raceTime)
     {
         string _username = GameManager.instance.carList[_id].GetComponent<CarInfo>().ownerUsername;
-        photonView.RPC("RPCAddPlayerToLeaderboard", RpcTarget.AllBuffered, _id, _position, _raceTime, _username);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("RPCAddPlayerToLeaderboard", RpcTarget.AllBuffered, _id, _position, _raceTime, _username);
+        }
     }
 
     [PunRPC]

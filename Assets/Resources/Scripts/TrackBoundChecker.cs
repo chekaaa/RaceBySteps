@@ -1,19 +1,23 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class TrackBoundChecker : MonoBehaviour
+public class TrackBoundChecker : MonoBehaviourPun
 {
     private const string CHECKPOINT_TAG = "Checkpoint";
     private const string BOUND_TAG = "Bound";
 
     private CarBehaviour m_carBehaviour;
+    private CarInfo m_carInfo;
 
 
     private Transform m_respawnPosition;
 
     private void Awake()
     {
+        m_carInfo = GetComponent<CarInfo>();
         m_respawnPosition = GameObject.Find("SpawnPoint").transform;
     }
 
@@ -38,8 +42,14 @@ public class TrackBoundChecker : MonoBehaviour
         {
             m_carBehaviour.StopCar();
             transform.position = m_respawnPosition.position;
-            transform.rotation = m_respawnPosition.rotation * Quaternion.Euler(0f, 0f, -90f); ;
+            transform.rotation = m_respawnPosition.rotation * Quaternion.Euler(0f, 0f, -90f);
+            if (m_carInfo.ownerId == PhotonNetwork.LocalPlayer.ActorNumber)
+            {
+                IngameUiManager.instance.arrow.eulerAngles = new Vector3(0f, 0f, 90f);
+                IngameUiManager.instance.arrowTarget.eulerAngles = new Vector3(0f, 0f, 90f);
+            }
         }
+
     }
 
 }

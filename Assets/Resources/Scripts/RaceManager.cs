@@ -56,7 +56,10 @@ public class RaceManager : MonoBehaviourPun
     public void AddLapToCar(int _playerId)
     {
         lapList[_playerId]++;
-        photonView.RPC("RPCUpdateLapDisplay", RpcTarget.All, lapList[_playerId], _playerId);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("RPCUpdateLapDisplay", RpcTarget.All, lapList[_playerId], _playerId);
+        }
 
         if (ischeckeredFlag(_playerId))
         {
@@ -73,8 +76,16 @@ public class RaceManager : MonoBehaviourPun
     }
     public void CallFinishGame()
     {
-        photonView.RPC("RPCFinishGame", RpcTarget.All);
+
+        GameManager.instance.isGameEnded = true;
+        IngameUiManager.instance.SetEndgameUI();
+        // if (PhotonNetwork.IsMasterClient)
+        // {
+        //     photonView.RPC("RPCFinishGame", RpcTarget.All);
+        // }
     }
+
+
 
     public void AddCarToPositionList(int _ownerId, float _raceTime)
     {
@@ -88,7 +99,10 @@ public class RaceManager : MonoBehaviourPun
         int _pos = positionList.FindIndex(x => x.ownerId == _ownerId) + 1;
         //Debug.Log("Position: " + _pos);
         IngameUiManager.instance.AddPlayerToLeaderBoard(_ownerId, _pos, _raceTime);
-        photonView.RPC("RPCWaitingForEndRace", RpcTarget.All, _ownerId);
+        if (PhotonNetwork.IsMasterClient)
+        {
+            photonView.RPC("RPCWaitingForEndRace", RpcTarget.All, _ownerId);
+        }
         GameManager.instance.carList[_ownerId].GetComponent<CarInfo>().StopCar();
     }
 
@@ -109,8 +123,14 @@ public class RaceManager : MonoBehaviourPun
     [PunRPC]
     public void RPCFinishGame()
     {
-        GameManager.instance.isGameEnded = true;
-        IngameUiManager.instance.SetEndgameUI();
+
+        StartCoroutine(StopCarAfterMovingPhase());
+
+    }
+
+    IEnumerator StopCarAfterMovingPhase()
+    {
+        yield return new WaitUntil(() => !GameManager.instance.isMovePhase);
 
     }
 
