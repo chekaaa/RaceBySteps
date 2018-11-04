@@ -46,13 +46,14 @@ public class IngameUiManager : MonoBehaviourPun
 
     private void Update()
     {
+        UpdatePhaseIndicators();
         if (GameManager.instance.localCar == null)
             return;
 
         UpdateArrow();
         UpdatetargetArrow();
         UpdateTurnsLeftDisplay();
-        UpdatePhaseIndicators();
+
     }
 
     private void UpdatePhaseIndicators()
@@ -61,10 +62,10 @@ public class IngameUiManager : MonoBehaviourPun
         if (GameManager.instance.isMovePhase)
         {
             _tmpColor = planPhaseImgColor;
-            _tmpColor.a = 50f;
+            _tmpColor.a = 0.5f;
             planPhaseImg.color = _tmpColor;
             _tmpColor = planPhaseTxtColor;
-            _tmpColor.a = 50f;
+            _tmpColor.a = 0.5f;
             planPhaseTxt.color = _tmpColor;
             movingPhaseImg.color = movingphaseImgColor;
             movingPhaseTxt.color = movingPhaseTxtColor;
@@ -72,10 +73,10 @@ public class IngameUiManager : MonoBehaviourPun
         else
         {
             _tmpColor = movingphaseImgColor;
-            _tmpColor.a = 50f;
+            _tmpColor.a = 0.5f;
             movingPhaseImg.color = _tmpColor;
             _tmpColor = movingPhaseTxtColor;
-            _tmpColor.a = 50f;
+            _tmpColor.a = 0.5f;
             movingPhaseTxt.color = _tmpColor;
             planPhaseImg.color = planPhaseImgColor;
             planPhaseTxt.color = planPhaseTxtColor;
