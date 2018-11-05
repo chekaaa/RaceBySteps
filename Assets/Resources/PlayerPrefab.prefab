@@ -172,8 +172,9 @@ MonoBehaviour:
   rotSpeed: 0
   rotLock: 0.004
   speed: 0
-  acceleration: 0.03
+  acceleration: 0.02
   maxSpeed: 0.1
+  breakMultiplier: 1.5
 --- !u!114 &114492041977804152
 MonoBehaviour:
   m_ObjectHideFlags: 1
