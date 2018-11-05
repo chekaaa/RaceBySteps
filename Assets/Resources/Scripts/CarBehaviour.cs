@@ -14,6 +14,7 @@ public class CarBehaviour : MonoBehaviourPunCallbacks
     [HideInInspector] public float speed = 0f;
     public float acceleration = .05f;
     public float maxSpeed = 0.1f;
+    public float breakMultiplier = 1.5f;
 
     private float m_rotAmount = 0f;
 
@@ -60,7 +61,15 @@ public class CarBehaviour : MonoBehaviourPunCallbacks
     void Move()
     {
         //m_speed += m_acceleration * Time.deltaTime;
-        speed = Mathf.MoveTowards(speed, m_targetSpeed, acceleration * GameManager.instance.delta);
+        if (m_targetSpeed >= speed)
+        {
+
+            speed = Mathf.MoveTowards(speed, m_targetSpeed, acceleration * GameManager.instance.delta);
+        }
+        else
+        {
+            speed = Mathf.MoveTowards(speed, m_targetSpeed, (acceleration * breakMultiplier) * GameManager.instance.delta);
+        }
         //m_speed = Mathf.Clamp(m_speed, -0.5f, m_maxSpeed);
 
         if (m_rotAmount > 0)

@@ -90,8 +90,16 @@ public class TrajectoryDisplayer : MonoBehaviourPun
                 dotList.Add(go);
             }
             //spd += m_acceleration * 0.02f;
-            spd = Mathf.MoveTowards(spd, _targetSpeed, GameManager.instance.delta * m_carBehaviour.acceleration);
+            if (_targetSpeed >= spd)
+            {
+                spd = Mathf.MoveTowards(spd, _targetSpeed, GameManager.instance.delta * m_carBehaviour.acceleration);
+            }
+            else
+            {
 
+                spd = Mathf.MoveTowards(spd, _targetSpeed, GameManager.instance.delta *
+                (m_carBehaviour.acceleration * GameManager.instance.localCar.breakMultiplier));
+            }
             if (_rotAmount > 0)
             {
                 rSpd = _rotAmount - spd;

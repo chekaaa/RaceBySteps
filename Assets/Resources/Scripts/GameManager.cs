@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private float m_readyTime = 0f;
     private float m_steps = 0f;
     private float m_planPhaseTimer = 0f;
+    public float totalSteps;
     public float turnDuration = 5f;
     public float planPhaseDuration = 4f;
     public float delta = 0.02f;
@@ -58,6 +59,8 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             Destroy(this.gameObject);
         }
+
+        totalSteps = turnDuration / delta;
     }
 
     private void Start()
