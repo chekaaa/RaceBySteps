@@ -46,7 +46,8 @@ public class TrackBoundChecker : MonoBehaviourPun
             if (m_carInfo.ownerId == PhotonNetwork.LocalPlayer.ActorNumber)
             {
                 IngameUiManager.instance.arrow.eulerAngles = new Vector3(0f, 0f, 90f);
-                IngameUiManager.instance.arrowTarget.eulerAngles = new Vector3(0f, 0f, 90f);
+                PlayerController.instance.UpdateBreakPedal();
+                PlayerController.instance.UpdateGasPedal();
             }
         }
 

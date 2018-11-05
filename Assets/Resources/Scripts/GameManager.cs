@@ -105,13 +105,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             m_idOfTurnEnded.Clear();
             actualDNFTurns--;
 
-
-            // if (PhotonNetwork.IsMasterClient)
-            // {
-
-
-
-            // }
             if (PhotonNetwork.IsMasterClient)
             {
                 photonView.RPC("RPCChangeMovePhase", RpcTarget.All);
@@ -272,6 +265,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         gasPedal.SetActive(false);
         breakPedal.SetActive(false);
         turnTimerTxt.gameObject.SetActive(false);
+
+        PlayerController.instance.isBreakPedalDown = false;
+        PlayerController.instance.isGasPedalDown = false;
+
         // gasSlider.SetActive(false);
         isWaiting = true;
         m_planPhaseTimer = planPhaseDuration;

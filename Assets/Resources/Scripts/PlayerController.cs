@@ -14,9 +14,11 @@ public class PlayerController : MonoBehaviour
     public float maxGas = 0.1f;
     public float maxRot = 50f;
 
+    private float _delta;
+
     public Slider gasSlider;
 
-    private bool m_isGasPedalDown = false, m_isBreakPedalDown = false;
+    public bool isGasPedalDown = false, isBreakPedalDown = false;
 
     private void Awake()
     {
@@ -28,7 +30,15 @@ public class PlayerController : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+
     }
+
+    private void Start()
+    {
+        _delta = (maxGas / 2f) * GameManager.instance.delta;
+    }
+
 
     private void Update()
     {
@@ -37,44 +47,54 @@ public class PlayerController : MonoBehaviour
 
         rotAmount = -SimpleInput.GetAxis("Horizontal") * maxRot;
         //targetSpeed = PlayerController.instance.gasSlider.value;
-        float _delta = (maxGas / 2f) * GameManager.instance.delta;
-        float _maxTargetGas;
 
-        if (m_isGasPedalDown)
+
+
+        if (isGasPedalDown)
         {
-            _maxTargetGas = GameManager.instance.localCar.speed +
-             ((GameManager.instance.localCar.acceleration * GameManager.instance.delta)
-              * GameManager.instance.totalSteps);
-
-            _maxTargetGas = Mathf.Clamp(_maxTargetGas, 0f, maxGas);
-
-            // Debug.Log("Pedal clicked");
-            float tmpSpeed = targetSpeed + _delta;
-            targetSpeed = Mathf.Clamp(tmpSpeed, 0, _maxTargetGas);
+            UpdateGasPedal();
         }
-        else if (m_isBreakPedalDown)
+        else if (isBreakPedalDown)
         {
-            _maxTargetGas = GameManager.instance.localCar.speed -
-             (((GameManager.instance.localCar.acceleration * GameManager.instance.localCar.breakMultiplier) * GameManager.instance.delta)
-             * GameManager.instance.totalSteps);
-
-            _maxTargetGas = Mathf.Clamp(_maxTargetGas, 0f, maxGas);
-
-            float tmpSpeed = targetSpeed - _delta;
-            targetSpeed = Mathf.Clamp(tmpSpeed, _maxTargetGas, maxGas);
+            UpdateBreakPedal();
         }
 
 
+    }
+
+    public void UpdateGasPedal()
+    {
+        float _maxTargetGas = GameManager.instance.localCar.speed +
+                     ((GameManager.instance.localCar.acceleration * GameManager.instance.delta)
+                      * GameManager.instance.totalSteps);
+
+        _maxTargetGas = Mathf.Clamp(_maxTargetGas, 0f, maxGas);
+
+        // Debug.Log("Pedal clicked");
+        float tmpSpeed = targetSpeed + _delta;
+        targetSpeed = Mathf.Clamp(tmpSpeed, 0, _maxTargetGas);
+    }
+
+    public void UpdateBreakPedal()
+    {
+        float _maxTargetGas = GameManager.instance.localCar.speed -
+                   (((GameManager.instance.localCar.acceleration * GameManager.instance.localCar.breakMultiplier) * GameManager.instance.delta)
+                   * GameManager.instance.totalSteps);
+
+        _maxTargetGas = Mathf.Clamp(_maxTargetGas, 0f, maxGas);
+
+        float tmpSpeed = targetSpeed - _delta;
+        targetSpeed = Mathf.Clamp(tmpSpeed, _maxTargetGas, maxGas);
     }
 
     public void OnClickBreakPedal(bool isBreakPedalDown)
     {
-        m_isBreakPedalDown = isBreakPedalDown;
+        this.isBreakPedalDown = isBreakPedalDown;
     }
 
     public void OnClickGasPedal(bool isGasPedaDown)
     {
-        m_isGasPedalDown = isGasPedaDown;
+        isGasPedalDown = isGasPedaDown;
         //   Debug.Log("Pedal clicked");
     }
 
