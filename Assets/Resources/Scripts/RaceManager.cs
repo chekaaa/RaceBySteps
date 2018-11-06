@@ -34,6 +34,7 @@ public class RaceManager : MonoBehaviourPun
         {
             Destroy(this.gameObject);
         }
+        cpParent = TrackManager.instance.currentTrack.cp;
     }
 
     private void Start()

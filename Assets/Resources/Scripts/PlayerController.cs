@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
 
     private float _delta;
 
-    public Slider gasSlider;
 
     public bool isGasPedalDown = false, isBreakPedalDown = false;
 

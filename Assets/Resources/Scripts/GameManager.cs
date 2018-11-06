@@ -11,15 +11,18 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager instance;
 
+    private const string BOUND_TAG = "Bound", TRACK_TAG = "Track", SPAWN_TAG = "Spawn";
+
     [SerializeField] private float m_readyTimeLimit = 15f;
     private float m_readyTime = 0f;
     private float m_steps = 0f;
     private float m_planPhaseTimer = 0f;
+
     public float totalSteps;
     public float turnDuration = 5f;
     public float planPhaseDuration = 4f;
     public float delta = 0.02f;
-    public int DNFTurns = 10;
+    // public int DNFTurns = 10;
     public int DNFTurnsAfterFinish = 4;
     public int actualDNFTurns;
 
@@ -61,16 +64,19 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
 
         totalSteps = turnDuration / delta;
+        m_spawnParent = GameObject.FindGameObjectWithTag(SPAWN_TAG).transform;
+
     }
 
     private void Start()
     {
+
         FillSpawnList();
         if (PhotonNetwork.IsMasterClient)
         {
             SpawnCars();
         }
-        actualDNFTurns = DNFTurns;
+        actualDNFTurns = TrackManager.instance.currentTrack.DNFTurns;
         m_spawnIndex = 0;
         turnTimerTxt.text = (int)m_planPhaseTimer + "";
         m_planPhaseTimer = planPhaseDuration;
