@@ -34,17 +34,18 @@ public class RaceManager : MonoBehaviourPun
         {
             Destroy(this.gameObject);
         }
-        cpParent = TrackManager.instance.currentTrack.cp;
+        this.enabled = false;
     }
 
-    private void Start()
+    public void Init()
     {
-        // if (!PhotonNetwork.IsMasterClient)
-        //     return;
 
+        cpParent = TrackManager.instance.currentTrack.cp;
         FillCpList();
         FillLapList();
+        this.enabled = true;
     }
+
 
     private void Update()
     {

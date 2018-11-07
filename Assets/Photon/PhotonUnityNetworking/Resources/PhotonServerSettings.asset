@@ -45,4 +45,6 @@ MonoBehaviour:
   - RPCAddPlayerToLeaderboard
   - RPCPlayerTurnInfo
   - RPCMovePhaseEnded
+  - RPCInitTrack
+  - RPCOnSceneLoaded
   DisableAutoOpenWizard: 1

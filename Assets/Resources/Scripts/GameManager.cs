@@ -63,13 +63,17 @@ public class GameManager : MonoBehaviourPunCallbacks
             Destroy(this.gameObject);
         }
 
+        this.enabled = false;
+        readyBtn.SetActive(false);
+    }
+
+
+    public void Init()
+    {
+        readyBtn.SetActive(true);
         totalSteps = turnDuration / delta;
         m_spawnParent = GameObject.FindGameObjectWithTag(SPAWN_TAG).transform;
 
-    }
-
-    private void Start()
-    {
 
         FillSpawnList();
         if (PhotonNetwork.IsMasterClient)
@@ -80,6 +84,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         m_spawnIndex = 0;
         turnTimerTxt.text = (int)m_planPhaseTimer + "";
         m_planPhaseTimer = planPhaseDuration;
+        this.enabled = true;
     }
 
 

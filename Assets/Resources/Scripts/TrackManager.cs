@@ -1,8 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
+using UnityEngine.SceneManagement;
 
-public class TrackManager : MonoBehaviour
+
+public class TrackManager : MonoBehaviourPun
 {
     public static TrackManager instance;
 
@@ -11,6 +15,7 @@ public class TrackManager : MonoBehaviour
     public Track currentTrack;
 
     public int randomIndex;
+    public int sceneLoadedCount = 0;
 
     private void Awake()
     {
@@ -23,7 +28,35 @@ public class TrackManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        InstantiateTrack();
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        photonView.RPC("RPCOnSceneLoaded", RpcTarget.All);
+    }
+
+    [PunRPC]
+    public void RPCOnSceneLoaded()
+    {
+        sceneLoadedCount++;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            if (sceneLoadedCount >= PhotonNetwork.CurrentRoom.PlayerCount)
+            {
+                InstantiateTrack();
+            }
+        }
     }
 
     private void InstantiateTrack()
@@ -32,11 +65,32 @@ public class TrackManager : MonoBehaviour
 
         randomIndex = Random.Range(0, trackPrefabs.Length);
         Debug.Log("track index: " + randomIndex);
-        Instantiate(trackPrefabs[randomIndex].track, Vector3.zero, Quaternion.identity);
-        Instantiate(trackPrefabs[randomIndex].bounds, Vector3.zero, Quaternion.identity);
-        Instantiate(trackPrefabs[randomIndex].spawnPoints, Vector3.zero, Quaternion.identity);
+        // PhotonNetwork.InstantiateSceneObject(trackPrefabs[randomIndex].track.name, Vector3.zero, Quaternion.identity);
+        // PhotonNetwork.InstantiateSceneObject(trackPrefabs[randomIndex].bounds.name, Vector3.zero, Quaternion.identity);
+        // PhotonNetwork.InstantiateSceneObject(trackPrefabs[randomIndex].spawnPoints.name, Vector3.zero, Quaternion.identity);
+        // Instantiate(trackPrefabs[randomIndex].track, Vector3.zero, Quaternion.identity);
+        // Instantiate(trackPrefabs[randomIndex].bounds, Vector3.zero, Quaternion.identity);
+        // Instantiate(trackPrefabs[randomIndex].spawnPoints, Vector3.zero, Quaternion.identity);
+        photonView.RPC("RPCInitTrack", RpcTarget.AllBuffered, randomIndex);
 
+
+    }
+
+
+
+    [PunRPC]
+    public void RPCInitTrack(int _randomIndex)
+    {
+        randomIndex = _randomIndex;
         currentTrack = trackPrefabs[randomIndex];
+
+        Instantiate(currentTrack.track, Vector3.zero, Quaternion.identity);
+        Instantiate(currentTrack.bounds, Vector3.zero, Quaternion.identity);
+        Instantiate(currentTrack.spawnPoints, Vector3.zero, Quaternion.identity);
+
+
+        GameManager.instance.Init();
+        RaceManager.instance.Init();
     }
 
 }
