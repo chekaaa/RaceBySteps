@@ -149,13 +149,15 @@ public class IngameUiManager : MonoBehaviourPun
     public void AddPlayerToLeaderBoard(int _id, int _position, float _raceTime)
     {
         string _username = GameManager.instance.carList[_id].GetComponent<CarInfo>().ownerUsername;
-        if (PhotonNetwork.IsMasterClient)
-        {
-            photonView.RPC("RPCAddPlayerToLeaderboard", RpcTarget.AllBuffered, _id, _position, _raceTime, _username);
-        }
+        // if (PhotonNetwork.IsMasterClient)
+        // {
+        //     photonView.RPC("RPCAddPlayerToLeaderboard", RpcTarget.AllBuffered, _id, _position, _raceTime, _username);
+        // }
+
+        RPCAddPlayerToLeaderboard(_id, _position, _raceTime, _username);
     }
 
-    [PunRPC]
+    // [PunRPC]
     public void RPCAddPlayerToLeaderboard(int _id, int _position, float _raceTime, string _username)
     {
 

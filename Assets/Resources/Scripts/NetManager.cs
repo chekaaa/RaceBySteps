@@ -19,6 +19,7 @@ public class NetManager : MonoBehaviourPunCallbacks
     public event PlayerJoinedRoomHandler PlayerJoinedRoom;
 
     public Button findMatchBtn;
+    public Button startBtn;
     public TMP_InputField usernameInput;
 
 
@@ -90,6 +91,11 @@ public class NetManager : MonoBehaviourPunCallbacks
     {
         if (JoinedRoom == null)
             return;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            startBtn.gameObject.SetActive(true);
+        }
         JoinedRoom();
     }
 
@@ -129,6 +135,11 @@ public class NetManager : MonoBehaviourPunCallbacks
         string _newUsername = usernameInput.text;
         PhotonNetwork.NickName = _newUsername;
         PlayerPrefs.SetString(USERNAME_PLAYERPREFS, _newUsername);
+    }
+
+    public override void OnLeftRoom()
+    {
+        startBtn.gameObject.SetActive(false);
     }
 
 }

@@ -51,7 +51,7 @@ public class RaceManager : MonoBehaviourPun
     {
         if (GameManager.instance.isMovePhase)
         {
-            m_lapTime += Time.deltaTime;
+            m_lapTime += GameManager.instance.delta;
         }
     }
 
@@ -101,14 +101,15 @@ public class RaceManager : MonoBehaviourPun
         int _pos = positionList.FindIndex(x => x.ownerId == _ownerId) + 1;
         //Debug.Log("Position: " + _pos);
         IngameUiManager.instance.AddPlayerToLeaderBoard(_ownerId, _pos, _raceTime);
-        if (PhotonNetwork.IsMasterClient)
+        if (!areAllFinished())
         {
-            photonView.RPC("RPCWaitingForEndRace", RpcTarget.All, _ownerId);
+            // photonView.RPC("RPCWaitingForEndRace", RpcTarget.All, _ownerId);
+            RPCWaitingForEndRace(_ownerId);
         }
         GameManager.instance.carList[_ownerId].GetComponent<CarInfo>().StopCar();
     }
 
-    [PunRPC]
+    // [PunRPC]
     public void RPCWaitingForEndRace(int _id)
     {
         if (_id == PhotonNetwork.LocalPlayer.ActorNumber)

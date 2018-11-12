@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
+using UnityEngine.UI;
 
 public class RoomManager : MonoBehaviour
 {
     public TMP_Text playerCountTxt;
+   
+
 
     private void Start()
     {
@@ -28,6 +31,17 @@ public class RoomManager : MonoBehaviour
     public void UpdatePlayerCountDisplay()
     {
         playerCountTxt.text = string.Format("{0}/{1}", PhotonNetwork.CurrentRoom.PlayerCount, PhotonNetwork.CurrentRoom.MaxPlayers);
+    }
+
+    public void StartGame()
+    {
+        if (!PhotonNetwork.IsMasterClient)
+            return;
+
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
+        PhotonNetwork.LoadLevel(1);
+
     }
 
     public void CheckFullRoom()
