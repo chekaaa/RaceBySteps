@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
+using TMPro;
 
 public class GooglePlayServiceManager : MonoBehaviour
 {
@@ -11,11 +12,7 @@ public class GooglePlayServiceManager : MonoBehaviour
 
     private void Awake()
     {
-        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder()
-        .RequestServerAuthCode(false)
-        .RequestIdToken()
-        .Build();
-
+        PlayGamesClientConfiguration config = new PlayGamesClientConfiguration.Builder().Build();
         PlayGamesPlatform.InitializeInstance(config);
         PlayGamesPlatform.DebugLogEnabled = true;
 
@@ -28,10 +25,17 @@ public class GooglePlayServiceManager : MonoBehaviour
 
         Social.localUser.Authenticate((bool success) =>
         {
+            Debug.Log("@Authenticate");
             // handle success or failure
             if (success)
             {
                 menuCanvas.SetActive(true);
+            }
+            else
+            {
+
+                menuCanvas.SetActive(false);
+
             }
         });
     }
