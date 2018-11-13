@@ -24,7 +24,11 @@
 
 public static class RBSGPS
 {
-        public const string leaderboard_track_1_leaderboard = "CgkI88isqMkQEAIQAQ"; // <GPGSID>
+        public const string leaderboard_track_1 = "CgkI88isqMkQEAIQAQ"; // <GPGSID>
+        public const string leaderboard_track_2 = "CgkI88isqMkQEAIQAg"; // <GPGSID>
+        public const string leaderboard_track_3 = "CgkI88isqMkQEAIQAw"; // <GPGSID>
+        public const string leaderboard_track_4 = "CgkI88isqMkQEAIQBA"; // <GPGSID>
+        public const string leaderboard_track_5 = "CgkI88isqMkQEAIQBQ"; // <GPGSID>
 
 }
 
