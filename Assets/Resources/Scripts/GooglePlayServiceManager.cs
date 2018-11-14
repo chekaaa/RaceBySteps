@@ -39,4 +39,10 @@ public class GooglePlayServiceManager : MonoBehaviour
             }
         });
     }
+
+    public void ShowLeaderboards()
+    {
+        Social.ShowLeaderboardUI();
+    }
+
 }

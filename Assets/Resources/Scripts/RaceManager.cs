@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
+using System;
 
 public class RaceManager : MonoBehaviourPun
 {
@@ -16,7 +17,7 @@ public class RaceManager : MonoBehaviourPun
 
     public int TotalLaps = 3;
 
-    private float m_lapTime = 0f;
+    public float lapTime = 0f;
 
     private Dictionary<int, int> lapList = new Dictionary<int, int>();
     public List<PlacingInfo> positionList = new List<PlacingInfo>();
@@ -51,9 +52,12 @@ public class RaceManager : MonoBehaviourPun
     {
         if (GameManager.instance.isMovePhase)
         {
-            m_lapTime += GameManager.instance.delta;
+            lapTime += GameManager.instance.delta;
+
         }
     }
+
+
 
     public void AddLapToCar(int _playerId)
     {
@@ -66,7 +70,7 @@ public class RaceManager : MonoBehaviourPun
         if (ischeckeredFlag(_playerId))
         {
 
-            AddCarToPositionList(_playerId, m_lapTime);
+            AddCarToPositionList(_playerId, lapTime);
         }
         if (areAllFinished())
         {
@@ -100,6 +104,11 @@ public class RaceManager : MonoBehaviourPun
         // int _pos = positionList.IndexOf(new PlacingInfo(_ownerId, _raceTime)) + 1;
         int _pos = positionList.FindIndex(x => x.ownerId == _ownerId) + 1;
         //Debug.Log("Position: " + _pos);
+        if (_ownerId == PhotonNetwork.LocalPlayer.ActorNumber && _raceTime >= 0)
+        {
+            long _miliseconds = Convert.ToInt64(_raceTime * 1000);
+            LeaderBoardManager.instance.PostTimeToLeaderboard(_miliseconds);
+        }
         IngameUiManager.instance.AddPlayerToLeaderBoard(_ownerId, _pos, _raceTime);
         if (!areAllFinished())
         {

@@ -24,11 +24,11 @@
 
 public static class RBSGPS
 {
-        public const string leaderboard_track_1 = "CgkI88isqMkQEAIQAQ"; // <GPGSID>
-        public const string leaderboard_track_2 = "CgkI88isqMkQEAIQAg"; // <GPGSID>
-        public const string leaderboard_track_3 = "CgkI88isqMkQEAIQAw"; // <GPGSID>
-        public const string leaderboard_track_4 = "CgkI88isqMkQEAIQBA"; // <GPGSID>
-        public const string leaderboard_track_5 = "CgkI88isqMkQEAIQBQ"; // <GPGSID>
+        public const string leaderboard_track1 = "CgkI88isqMkQEAIQBg"; // <GPGSID>
+        public const string leaderboard_track2 = "CgkI88isqMkQEAIQBw"; // <GPGSID>
+        public const string leaderboard_track3 = "CgkI88isqMkQEAIQCA"; // <GPGSID>
+        public const string leaderboard_track4 = "CgkI88isqMkQEAIQCQ"; // <GPGSID>
+        public const string leaderboard_track5 = "CgkI88isqMkQEAIQCg"; // <GPGSID>
 
 }
 

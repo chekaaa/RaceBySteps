@@ -91,6 +91,8 @@ public class TrackManager : MonoBehaviourPun
 
         GameManager.instance.Init();
         RaceManager.instance.Init();
+        TimeDisplayer.instance.Init();
+        LeaderBoardManager.instance.GetTrackid();
     }
 
 }

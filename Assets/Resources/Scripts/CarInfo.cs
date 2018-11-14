@@ -51,13 +51,15 @@ public class CarInfo : MonoBehaviourPun
 
     public void StopCar()
     {
-        photonView.RPC("RPCStopCar", RpcTarget.All);
+        isFinished = true;
+        StartCoroutine(StopCarAfterMovingPhase());
+        // photonView.RPC("RPCStopCar", RpcTarget.All);
     }
 
     [PunRPC]
     public void RPCStopCar()
     {
-        StartCoroutine(StopCarAfterMovingPhase());
+
     }
 
     IEnumerator StopCarAfterMovingPhase()
@@ -66,7 +68,7 @@ public class CarInfo : MonoBehaviourPun
         m_carBehaviour.enabled = false;
         m_trajectoryDisplayer.enabled = false;
         m_trajectoryDisplayer.RemoveDots();
-        isFinished = true;
+
         if (PhotonNetwork.LocalPlayer.ActorNumber == ownerId)
         {
             CameraBehaviour.instance.ChangeSpectateCamera();
